@@ -8,13 +8,11 @@ where
 
 import Data.Functor.Const (Const (..))
 import Data.Functor.Identity (Identity (..))
-import Data.Traversable (Traversable)
 import Fana.Haskell.DescribingClass
 import Fana.Math.Algebra.Category.Functor.Pro
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Optic.Concrete.Combine
 import Fana.Prelude hiding (traverse)
-import Prelude (Applicative (..))
 
 import qualified Data.Either as Base
 import qualified Data.Traversable as Base

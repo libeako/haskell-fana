@@ -4,7 +4,6 @@ module Fana.Optic.Profunctor.Access.Over
 )
 where
 
-import Prelude (Monoid, Applicative)
 import Fana.Prelude hiding (traverse, fold)
 import Fana.Optic.Profunctor.Optic
 import Fana.Optic.Profunctor.Categories

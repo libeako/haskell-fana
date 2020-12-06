@@ -20,7 +20,6 @@ import Fana.Math.Algebra.Category.Functor.Pro (Profunctor, dimap)
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Optic.Concrete.Combine
 import Fana.Prelude.FromBase
-import Prelude (($), fst, snd, pure)
 
 import qualified Data.Constraint as Constraint
 import qualified Data.Bifunctor as BiFr

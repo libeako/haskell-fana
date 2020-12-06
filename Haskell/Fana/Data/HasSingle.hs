@@ -7,7 +7,6 @@ module Fana.Data.HasSingle
 )
 where
 
-import Data.Kind (Type)
 import Data.Functor (($>))
 import Data.Functor.Identity (Identity (..))
 import Fana.Prelude

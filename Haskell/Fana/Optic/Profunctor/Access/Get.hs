@@ -7,7 +7,6 @@ where
 import Fana.Math.Algebra.Category.Functor.Pro (Profunctor)
 import Fana.Optic.Profunctor.Optic
 import Fana.Prelude
-import Prelude (snd)
 
 import qualified Data.Bifunctor as BiFr
 import qualified Data.Either as Either

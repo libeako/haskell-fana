@@ -5,7 +5,6 @@ module Fana.Optic.Laarhoven.Traverse
 )
 where
 
-import Control.Applicative (Applicative)
 import Data.Functor.Identity (Identity (..))
 import Fana.Math.Algebra.Category.Functor.Pro (Profunctor)
 import Fana.Prelude

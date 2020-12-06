@@ -27,7 +27,6 @@ import Control.Arrow ((***))
 import Fana.Haskell.TypePair (Fst, Snd)
 import Fana.Math.Algebra.Category.Functor.Pro (Profunctor (..))
 import Fana.Prelude
-import Prelude (fst)
 
 import qualified Control.Monad.Except as Mtl
 import qualified Control.Monad.State.Lazy as Mtl

@@ -9,7 +9,6 @@ module Fana.Data.Tree.ParseFromElemList
 )
 where
 
-import Control.Monad (return)
 import Data.Tree (Tree (..))
 import Fana.Data.Tree.OfBase (with_hight)
 import Fana.Math.Algebra.Monoid.Accumulate

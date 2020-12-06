@@ -5,7 +5,6 @@ module Fana.Serial.Bidir.Instances.Basic
 )
 where
 
-import Control.Applicative (pure)
 import Data.Traversable ()
 import Fana.Convert (ExistsConversion (..))
 import Fana.Serial.Bidir.Parse (Parser)

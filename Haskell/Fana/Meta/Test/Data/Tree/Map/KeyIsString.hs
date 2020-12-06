@@ -4,7 +4,7 @@ module Fana.Meta.Test.Data.Tree.Map.KeyIsString
 )
 where
 
-import Prelude (fst, snd, (&&), (+))
+import Prelude ((+))
 import Fana.Prelude
 
 import Fana.Data.Key.LensToMaybeElement

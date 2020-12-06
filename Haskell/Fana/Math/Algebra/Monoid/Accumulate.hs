@@ -5,8 +5,6 @@ module Fana.Math.Algebra.Monoid.Accumulate
 )
 where
 
-import Data.Foldable (fold)
-import Data.Semigroup (Semigroup (..))
 import Fana.Prelude.FromBase
 
 import qualified Data.String as Base

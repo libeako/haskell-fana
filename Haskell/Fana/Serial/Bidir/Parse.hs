@@ -7,7 +7,7 @@ module Fana.Serial.Bidir.Parse
 where
 
 import Fana.Prelude
-import Prelude (fst, String)
+import Prelude (String)
 
 import qualified Control.Monad.State.Lazy as Monad
 import qualified Fana.Math.Algebra.Monoid.Accumulate as Accu

@@ -12,7 +12,6 @@ where
 
 import Fana.Math.Algebra.Category.Functor.Pro
 import Fana.Prelude
-import Prelude (fst, snd, Monoid)
 
 import qualified Data.Foldable as Foldable
 

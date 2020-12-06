@@ -10,7 +10,6 @@ import Fana.Math.Algebra.Category.Functor.Pro (Profunctor)
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Optic.Concrete.Categories.Iso (Iso (Iso))
 import Fana.Prelude
-import Prelude (($), fst, snd, Either, either, mempty, Applicative (..))
 
 import qualified Data.Bifunctor as BiFr
 import qualified Data.Constraint as Constraint

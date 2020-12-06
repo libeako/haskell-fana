@@ -14,7 +14,6 @@ where
 
 import Control.Arrow ((&&&))
 import Fana.Prelude hiding (curry, uncurry)
-import Prelude (fst, snd)
 
 import qualified Data.Distributive as Functor
 import qualified Data.Functor.Rep as Functor

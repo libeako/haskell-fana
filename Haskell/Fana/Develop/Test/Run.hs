@@ -5,7 +5,6 @@ module Fana.Develop.Test.Run
 where
 
 
-import Control.Applicative ((*>))
 import Prelude ((++), String)
 import Fana.Prelude
 import Fana.Develop.Test.Define

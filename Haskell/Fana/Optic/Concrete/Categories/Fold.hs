@@ -7,12 +7,10 @@ module Fana.Optic.Concrete.Categories.Fold
 where
 
 import Control.Monad ((<=<))
-import Data.Foldable (Foldable)
 import Fana.Haskell.DescribingClass
 import Fana.Math.Algebra.Category.Functor.Pro
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Prelude.FromBase
-import Prelude (Monoid, pure)
 
 import qualified Data.Foldable as Foldable
 import qualified Data.Semigroup as Sg

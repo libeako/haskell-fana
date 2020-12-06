@@ -8,10 +8,9 @@ module Fana.Serial.Print.Show
 )
 where
 
-import Control.Category (id, (>>>))
 import Fana.Math.Algebra.Monoid.Accumulate
 import Fana.Prelude.FromBase
-import Prelude (($), ShowS, String)
+import Prelude (ShowS, String)
 
 import qualified Fana.Optic.Concrete.Categories.Iso as Optic
 import qualified Prelude as Base

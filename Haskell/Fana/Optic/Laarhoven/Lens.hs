@@ -8,9 +8,7 @@ module Fana.Optic.Laarhoven.Lens
 )
 where
 
-import Prelude (fst, snd)
 import Control.Applicative (Const (..))
-import Data.Functor (Functor)
 import Data.Functor.Identity(Identity (..))
 
 import Fana.Prelude hiding (flip)

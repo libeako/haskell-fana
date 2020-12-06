@@ -13,7 +13,6 @@ import Fana.Haskell.DescribingClass
 import Fana.Math.Algebra.Category.Functor.Pro(Profunctor, dimap)
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Prelude.FromBase
-import Prelude (either, mempty, pure)
 
 import qualified Data.Bifunctor as BiFr
 import qualified Data.Constraint as Constraint

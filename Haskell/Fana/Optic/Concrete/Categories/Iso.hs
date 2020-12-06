@@ -18,7 +18,6 @@ import Fana.Haskell.DescribingClass
 import Fana.Math.Algebra.Category.Functor.Pro (Profunctor, dimap)
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Prelude
-import Prelude (snd, (&&), pure)
 
 import qualified Data.Constraint as Constraint
 import qualified Data.Either as Base

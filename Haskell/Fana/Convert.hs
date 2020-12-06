@@ -4,7 +4,6 @@ module Fana.Convert
 )
 where
 
-import Data.Kind (Type)
 import Fana.Prelude.FromBase
 
 import qualified Data.Coerce as Base

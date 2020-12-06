@@ -14,7 +14,6 @@ import Fana.Math.Algebra.Category.Functor.Pro
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Optic.Concrete.Categories.Iso (Iso')
 import Fana.Prelude
-import Prelude (fst, snd, (&&))
 
 import qualified Data.Bifunctor as Bifunctor
 import qualified Data.Either as Either

@@ -6,7 +6,6 @@ module Fana.Haskell.Wrap
 )
 where
 
-import Data.Kind (Type)
 import Fana.Prelude.FromBase
 import Control.Applicative as App
 

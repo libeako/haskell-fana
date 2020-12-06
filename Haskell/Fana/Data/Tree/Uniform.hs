@@ -16,7 +16,7 @@ where
 
 import Fana.Haskell.Wrap (Wrap (Unwrap))
 import Fana.Prelude.FromBase
-import Prelude (fmap, foldMap)
+import Prelude (fmap)
 
 import qualified Fana.Data.HeteroPair as Pair
 import qualified Fana.Data.Recurse as Recurse
