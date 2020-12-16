@@ -99,7 +99,7 @@ library
       Fana.Data.Tree.Discriminating
       Fana.Data.Tree.Leaf
       Fana.Data.Tree.OfBase
-      Fana.Data.Tree.ParseFromElemList
+      Fana.Data.Tree.SerializeHight
       Fana.Data.Tree.Uniform
       Fana.Data.Zippable
       Fana.Develop.Test.Define
@@ -119,7 +119,7 @@ library
       Fana.Math.Algebra.Monoid.Accumulate
       Fana.Meta.Test.All
       Fana.Meta.Test.Data.Tree.Map.KeyIsString
-      Fana.Meta.Test.Data.Tree.ParseFromElemList
+      Fana.Meta.Test.Data.Tree.SerializeHight
       Fana.OperatingSystem.ExitCode
       Fana.Optic.AaaReadme
       Fana.Optic.Concrete.AaaReadme

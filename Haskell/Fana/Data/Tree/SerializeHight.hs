@@ -1,7 +1,7 @@
 {-|
-	Parsing a tree from the list of its nodes given as (hight * value) pairs.
+	Serialize a tree to and from list of its nodes given as (hight * value) pairs in depth-first order.
 -}
-module Fana.Data.Tree.ParseFromElemList
+module Fana.Data.Tree.SerializeHight
 (
 	Hight,
 	HightListParseError (..),
@@ -81,11 +81,10 @@ parser_of_tree_at_hight hight =
 parse :: [(Hight, e)] -> Either (HightListParseError e) [Tree e]
 parse = Mtl.evalStateT (parser_of_forest_at_hight 0)
 
+render :: [Tree e] -> [(Hight, e)]
+render = 
+	map (with_hight >>> map (Bifunctor.first (+ (- 1)) >>> uncurry (,)) >>> Foldable.toList)
+	>>> Foldable.concat
 
 serializer :: Optic.PartialIso' (HightListParseError e) [(Hight, e)] [Tree e]
-serializer =
-	let
-		render =
-			map (with_hight >>> map (Bifunctor.first (+ (- 1)) >>> uncurry (,)) >>> Foldable.toList)
-			>>> Foldable.concat
-		in Optic.PartialIso render parse
+serializer = Optic.PartialIso render parse

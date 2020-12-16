@@ -1,4 +1,4 @@
-module Fana.Meta.Test.Data.Tree.ParseFromElemList
+module Fana.Meta.Test.Data.Tree.SerializeHight
 (
 	serialization_test,
 )
@@ -6,7 +6,7 @@ module Fana.Meta.Test.Data.Tree.ParseFromElemList
 where
 
 import Data.Tree (Tree (..))
-import Fana.Data.Tree.ParseFromElemList
+import Fana.Data.Tree.SerializeHight
 import Fana.Develop.Test.Define (Test)
 
 import qualified Fana.Data.HeteroPair as Pair
