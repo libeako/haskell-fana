@@ -5,7 +5,7 @@ module Fana.Data.Tree.SerializeHight
 (
 	Hight,
 	HightListParseError (..),
-	parse, serializer,
+	render, parse, serializer,
 )
 where
 

@@ -7,6 +7,7 @@ where
 import Prelude (Ord (..), Char, Show (..))
 import Fana.Prelude.FromBase
 import Fana.Develop.Test.Define (Test)
+import Fana.Serial.Bidir.Instances.Text.Lines (lines)
 import Fana.Serial.Bidir.Serializer
 import Fana.Serial.Bidir.Test
 
@@ -118,6 +119,17 @@ test_whole =
 	Test.single "whole" (test_serializer (Serial.whole Serial.nothing) [()] ["c"])
 
 
+--------------------------- Text
+
+test_lines :: Test
+test_lines = Test.single "lines" (Optic.test_iso_law lines ([[], ["hello"], ["hello", "world"]], []))
+
+test_text :: Test
+test_text = Test.bunch "text" [test_lines]
+
+
+--------------------------- All
+
 test :: Test
 test =
 	let
@@ -133,5 +145,6 @@ test =
 			, test_flat_sum
 			, test_enum
 			, test_whole
+			, test_text
 			]
 		in Test.bunch "combine" simple_tests
