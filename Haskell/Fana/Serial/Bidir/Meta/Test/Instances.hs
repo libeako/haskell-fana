@@ -7,6 +7,7 @@ where
 import Prelude (Ord (..), Char, Show (..))
 import Fana.Prelude.FromBase
 import Fana.Develop.Test.Define (Test)
+import Fana.Serial.Bidir.Instances.Text.Indent (line_with_indent)
 import Fana.Serial.Bidir.Instances.Text.Lines (lines)
 import Fana.Serial.Bidir.Serializer
 import Fana.Serial.Bidir.Test
@@ -124,8 +125,13 @@ test_whole =
 test_lines :: Test
 test_lines = Test.single "lines" (Optic.test_iso_law lines ([[], ["hello"], ["hello", "world"]], []))
 
+test_indenting :: Test
+test_indenting =
+	Test.single "indentation"
+		(Optic.test_iso_law line_with_indent ([(0, ""), (1, "a")], []))
+
 test_text :: Test
-test_text = Test.bunch "text" [test_lines]
+test_text = Test.bunch "text" [test_lines, test_indenting]
 
 
 --------------------------- All

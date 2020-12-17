@@ -1,7 +1,7 @@
 cabal-version: 3.0
 
 name:           fana
-version:        0.0.0.145
+version:        0.0.0.146
 synopsis:       some commonly useful stuff
 license-file:   _license_.txt
 build-type:     Simple
@@ -161,6 +161,7 @@ library
       Fana.Serial.Bidir.Instances.Multiple
       Fana.Serial.Bidir.Instances.ProductSum
       Fana.Serial.Bidir.Instances.Tag
+      Fana.Serial.Bidir.Instances.Text.Indent
       Fana.Serial.Bidir.Instances.Text.Lines
       Fana.Serial.Bidir.Instances.WithStartPosition
       Fana.Serial.Bidir.Meta.Test.Main
