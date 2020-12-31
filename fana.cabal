@@ -7,172 +7,172 @@ license-file:   _license_.txt
 build-type:     Simple
 description:
 
-	A library containing stuff useful generally in Haskell.
-
-	= Content
-
-	* Optics. See "Fana.Optic.AaaReadme".
-	* A very simple but useful testing library. See "Fana.Develop.Test.Define".
-	* Bidirectional serialization. See "Fana.Serial.Bidir.Serializer"
-	* Indented text output. See "Fana.Serial.Print.Indent".
-	* A show mechanism that supports fast compositition of the output with arbitrary grouping.
-	See "Fana.Serial.Print.Show".
-	* Recursion schemes. Only basics. See "Fana.Data.Recurse".
-	* Serialization of trees from list of elements with their hights.
-	See "Fana.Data.Tree.ParseFromElemList".
-	* Various tools to work better with the Haskell language. See "Fana.Haskell.AaaReadme".
-
-	= Style
-
-	Primerily simple.
-
-	I sacrificed run-time efficiency for simplicity at several places. But not asymptotically.
-	For example i rather go over a collection twice than
-	maintain a traversing function that does a mixed job with the elements.
-
-	I avoided advanced techniques, I leaned toward down-to-earth choices.
-	A good example is that i settled with concrete representation of optics.
-
-	= Naming
-
-	Import with qualification.
+    A library containing stuff useful generally in Haskell.
+    
+    = Content
+    
+    * Optics. See "Fana.Optic.AaaReadme".
+    * A very simple but useful testing library. See "Fana.Develop.Test.Define".
+    * Bidirectional serialization. See "Fana.Serial.Bidir.Serializer"
+    * Indented text output. See "Fana.Serial.Print.Indent".
+    * A show mechanism that supports fast compositition of the output with arbitrary grouping.
+    See "Fana.Serial.Print.Show".
+    * Recursion schemes. Only basics. See "Fana.Data.Recurse".
+    * Serialization of trees from list of elements with their hights.
+    See "Fana.Data.Tree.ParseFromElemList".
+    * Various tools to work better with the Haskell language. See "Fana.Haskell.AaaReadme".
+    
+    = Style
+    
+    Primerily simple.
+    
+    I sacrificed run-time efficiency for simplicity at several places. But not asymptotically.
+    For example i rather go over a collection twice than
+    maintain a traversing function that does a mixed job with the elements.
+    
+    I avoided advanced techniques, I leaned toward down-to-earth choices.
+    A good example is that i settled with concrete representation of optics.
+    
+    = Naming
+    
+    Import with qualification.
 
 common common
-  hs-source-dirs:
-      Haskell
-  default-language: Haskell2010
-  default-extensions:
-    EmptyDataDecls EmptyCase LambdaCase
-    NoImplicitPrelude NoMonomorphismRestriction
-    InstanceSigs StandaloneDeriving
-    BangPatterns
-    TypeOperators ExplicitForAll ScopedTypeVariables TypeApplications OverloadedStrings
-    TypeInType RankNTypes GADTs ConstraintKinds
-    AllowAmbiguousTypes
-    LiberalTypeSynonyms
-    TypeFamilies TypeFamilyDependencies
-    FlexibleContexts FlexibleInstances MultiParamTypeClasses QuantifiedConstraints
-    DefaultSignatures
-    DeriveFunctor DeriveFoldable DeriveTraversable
-    GeneralizedNewtypeDeriving
-  ghc-options:
-    -fno-warn-tabs
-    -fwarn-incomplete-patterns -fwarn-incomplete-uni-patterns
-    -Wname-shadowing -Wincomplete-record-updates -Woverflowed-literals -Wmonomorphism-restriction
-    -Wwrong-do-bind -Wunticked-promoted-constructors -Wunsupported-llvm-version
-    -Worphans -Wsemigroup -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances
-    -Wredundant-constraints -Wunused-imports -Wunused-foralls -Wmissing-signatures -Wcompat
-    -Wno-missing-home-modules -Werror -fshow-warning-groups
-    -O -fspecialise-aggressively -fexpose-all-unfoldings
-  build-depends:
-      adjunctions >=4.3 && <4.5
-    , base >=4.6 && <4.14
-    , constraints >=0.10 && <0.11
-    , containers >=0.5 && <0.6
-    , data-default-class >=0.1 && <0.2
-    , distributive >=0.5 && <0.6
-    , mtl >=2.2 && <2.3
+    hs-source-dirs:
+        Haskell
+    default-language: Haskell2010
+    default-extensions:
+        EmptyDataDecls EmptyCase LambdaCase
+        NoImplicitPrelude NoMonomorphismRestriction
+        InstanceSigs StandaloneDeriving
+        BangPatterns
+        TypeOperators ExplicitForAll ScopedTypeVariables TypeApplications OverloadedStrings
+        TypeInType RankNTypes GADTs ConstraintKinds
+        AllowAmbiguousTypes
+        LiberalTypeSynonyms
+        TypeFamilies TypeFamilyDependencies
+        FlexibleContexts FlexibleInstances MultiParamTypeClasses QuantifiedConstraints
+        DefaultSignatures
+        DeriveFunctor DeriveFoldable DeriveTraversable
+        GeneralizedNewtypeDeriving
+    ghc-options:
+        -fno-warn-tabs
+        -fwarn-incomplete-patterns -fwarn-incomplete-uni-patterns
+        -Wname-shadowing -Wincomplete-record-updates -Woverflowed-literals -Wmonomorphism-restriction
+        -Wwrong-do-bind -Wunticked-promoted-constructors -Wunsupported-llvm-version
+        -Worphans -Wsemigroup -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances
+        -Wredundant-constraints -Wunused-imports -Wunused-foralls -Wmissing-signatures -Wcompat
+        -Wno-missing-home-modules -Werror -fshow-warning-groups
+        -O -fspecialise-aggressively -fexpose-all-unfoldings
+    build-depends:
+          adjunctions >=4.3 && <4.5
+        , base >=4.6 && <4.14
+        , constraints >=0.10 && <0.11
+        , containers >=0.5 && <0.6
+        , data-default-class >=0.1 && <0.2
+        , distributive >=0.5 && <0.6
+        , mtl >=2.2 && <2.3
 
 library
-  import : common
-  exposed-modules:
-      Fana.Convert
-      Fana.Data.Boole
-      Fana.Data.CollectionWithEmpty
-      Fana.Data.Either
-      Fana.Data.Enum
-      Fana.Data.Filter
-      Fana.Data.Function
-      Fana.Data.FunctionUpIo
-      Fana.Data.HasSingle
-      Fana.Data.HeteroPair
-      Fana.Data.HomoPair
-      Fana.Data.Identified
-      Fana.Data.Key.ElementsHaveKey
-      Fana.Data.Key.LensToMaybeElement
-      Fana.Data.Key.Map.Interface
-      Fana.Data.Key.Map.KeyIsString
-      Fana.Data.Key.Traversable
-      Fana.Data.List
-      Fana.Data.Maybe
-      Fana.Data.Recurse
-      Fana.Data.Tree.Discriminating
-      Fana.Data.Tree.Leaf
-      Fana.Data.Tree.OfBase
-      Fana.Data.Tree.SerializeHight
-      Fana.Data.Tree.Uniform
-      Fana.Data.Zippable
-      Fana.Develop.Test.Define
-      Fana.Develop.Test.Run
-      Fana.Develop.Trace
-      Fana.Haskell.AaaReadme
-      Fana.Haskell.DescribingClass
-      Fana.Haskell.TypePair
-      Fana.Haskell.Wrap
-      Fana.Math.Algebra.Category
-      Fana.Math.Algebra.Category.ConvertThenCompose
-      Fana.Math.Algebra.Category.Functor.Monoidal.Monad.MethodFromMethod
-      Fana.Math.Algebra.Category.Functor.Monoidal.Monad.FreeOverFunctor
-      Fana.Math.Algebra.Category.Functor.Pro
-      Fana.Math.Algebra.Category.Functor.Product
-      Fana.Math.Algebra.Category.OnTypePairs
-      Fana.Math.Algebra.Monoid.Accumulate
-      Fana.Meta.Test.All
-      Fana.Meta.Test.Data.Tree.Map.KeyIsString
-      Fana.Meta.Test.Data.Tree.SerializeHight
-      Fana.OperatingSystem.ExitCode
-      Fana.Optic.AaaReadme
-      Fana.Optic.Concrete.AaaReadme
-      Fana.Optic.Concrete.Categories.AffineTraverse
-      Fana.Optic.Concrete.Categories.Down
-      Fana.Optic.Concrete.Categories.Interfaces
-      Fana.Optic.Concrete.Categories.FnUp
-      Fana.Optic.Concrete.Categories.Fold
-      Fana.Optic.Concrete.Categories.Iso
-      Fana.Optic.Concrete.Categories.Lens
-      Fana.Optic.Concrete.Categories.PartialIso
-      Fana.Optic.Concrete.Categories.Prism
-      Fana.Optic.Concrete.Categories.Traversal
-      Fana.Optic.Concrete.Categories.Up
-      Fana.Optic.Concrete.Combine
-      Fana.Optic.Concrete.Common
-      Fana.Optic.Concrete.Prelude
-      Fana.Optic.Laarhoven.Lens
-      Fana.Optic.Laarhoven.Traverse
-      Fana.Optic.Profunctor.Access.Get
-      Fana.Optic.Profunctor.Access.Over
-      Fana.Optic.Profunctor.Access.Set
-      Fana.Optic.Profunctor.AdaptIso
-      Fana.Optic.Profunctor.Categories
-      Fana.Optic.Profunctor.Equality
-      Fana.Optic.Profunctor.Interface
-      Fana.Optic.Profunctor.Optic
-      Fana.Optic.Profunctor.Prelude
-      Fana.Prelude
-      Fana.Prelude.FromBase
-      Fana.Prelude.FromElse
-      Fana.Serial.Bidir.Instances.Basic
-      Fana.Serial.Bidir.Instances.Conditioned
-      Fana.Serial.Bidir.Instances.Concrete
-      Fana.Serial.Bidir.Instances.Decorate
-      Fana.Serial.Bidir.Instances.Enum
-      Fana.Serial.Bidir.Instances.FlatSum
-      Fana.Serial.Bidir.Instances.Maybe
-      Fana.Serial.Bidir.Instances.Multiple
-      Fana.Serial.Bidir.Instances.ProductSum
-      Fana.Serial.Bidir.Instances.Tag
-      Fana.Serial.Bidir.Instances.Text.Indent
-      Fana.Serial.Bidir.Instances.Text.Lines
-      Fana.Serial.Bidir.Instances.WithStartPosition
-      Fana.Serial.Bidir.Meta.Test.Main
-      Fana.Serial.Bidir.Meta.Test.Instances
-      Fana.Serial.Bidir.Parse
-      Fana.Serial.Bidir.Serializer
-      Fana.Serial.Bidir.Test
-      Fana.Serial.Print.Indent
-      Fana.Serial.Print.Show
+    import : common
+    exposed-modules:
+        Fana.Convert
+        Fana.Data.Boole
+        Fana.Data.CollectionWithEmpty
+        Fana.Data.Either
+        Fana.Data.Enum
+        Fana.Data.Filter
+        Fana.Data.Function
+        Fana.Data.FunctionUpIo
+        Fana.Data.HasSingle
+        Fana.Data.HeteroPair
+        Fana.Data.HomoPair
+        Fana.Data.Identified
+        Fana.Data.Key.ElementsHaveKey
+        Fana.Data.Key.LensToMaybeElement
+        Fana.Data.Key.Map.Interface
+        Fana.Data.Key.Map.KeyIsString
+        Fana.Data.Key.Traversable
+        Fana.Data.List
+        Fana.Data.Maybe
+        Fana.Data.Recurse
+        Fana.Data.Tree.Discriminating
+        Fana.Data.Tree.Leaf
+        Fana.Data.Tree.OfBase
+        Fana.Data.Tree.SerializeHight
+        Fana.Data.Tree.Uniform
+        Fana.Data.Zippable
+        Fana.Develop.Test.Define
+        Fana.Develop.Test.Run
+        Fana.Develop.Trace
+        Fana.Haskell.AaaReadme
+        Fana.Haskell.DescribingClass
+        Fana.Haskell.TypePair
+        Fana.Haskell.Wrap
+        Fana.Math.Algebra.Category
+        Fana.Math.Algebra.Category.ConvertThenCompose
+        Fana.Math.Algebra.Category.Functor.Monoidal.Monad.MethodFromMethod
+        Fana.Math.Algebra.Category.Functor.Monoidal.Monad.FreeOverFunctor
+        Fana.Math.Algebra.Category.Functor.Pro
+        Fana.Math.Algebra.Category.Functor.Product
+        Fana.Math.Algebra.Category.OnTypePairs
+        Fana.Math.Algebra.Monoid.Accumulate
+        Fana.Meta.Test.All
+        Fana.Meta.Test.Data.Tree.Map.KeyIsString
+        Fana.Meta.Test.Data.Tree.SerializeHight
+        Fana.OperatingSystem.ExitCode
+        Fana.Optic.AaaReadme
+        Fana.Optic.Concrete.AaaReadme
+        Fana.Optic.Concrete.Categories.AffineTraverse
+        Fana.Optic.Concrete.Categories.Down
+        Fana.Optic.Concrete.Categories.Interfaces
+        Fana.Optic.Concrete.Categories.FnUp
+        Fana.Optic.Concrete.Categories.Fold
+        Fana.Optic.Concrete.Categories.Iso
+        Fana.Optic.Concrete.Categories.Lens
+        Fana.Optic.Concrete.Categories.PartialIso
+        Fana.Optic.Concrete.Categories.Prism
+        Fana.Optic.Concrete.Categories.Traversal
+        Fana.Optic.Concrete.Categories.Up
+        Fana.Optic.Concrete.Combine
+        Fana.Optic.Concrete.Common
+        Fana.Optic.Concrete.Prelude
+        Fana.Optic.Laarhoven.Lens
+        Fana.Optic.Laarhoven.Traverse
+        Fana.Optic.Profunctor.Access.Get
+        Fana.Optic.Profunctor.Access.Over
+        Fana.Optic.Profunctor.Access.Set
+        Fana.Optic.Profunctor.AdaptIso
+        Fana.Optic.Profunctor.Categories
+        Fana.Optic.Profunctor.Equality
+        Fana.Optic.Profunctor.Interface
+        Fana.Optic.Profunctor.Optic
+        Fana.Optic.Profunctor.Prelude
+        Fana.Prelude
+        Fana.Prelude.FromBase
+        Fana.Prelude.FromElse
+        Fana.Serial.Bidir.Instances.Basic
+        Fana.Serial.Bidir.Instances.Conditioned
+        Fana.Serial.Bidir.Instances.Concrete
+        Fana.Serial.Bidir.Instances.Decorate
+        Fana.Serial.Bidir.Instances.Enum
+        Fana.Serial.Bidir.Instances.FlatSum
+        Fana.Serial.Bidir.Instances.Maybe
+        Fana.Serial.Bidir.Instances.Multiple
+        Fana.Serial.Bidir.Instances.ProductSum
+        Fana.Serial.Bidir.Instances.Tag
+        Fana.Serial.Bidir.Instances.Text.Indent
+        Fana.Serial.Bidir.Instances.Text.Lines
+        Fana.Serial.Bidir.Instances.WithStartPosition
+        Fana.Serial.Bidir.Meta.Test.Main
+        Fana.Serial.Bidir.Meta.Test.Instances
+        Fana.Serial.Bidir.Parse
+        Fana.Serial.Bidir.Serializer
+        Fana.Serial.Bidir.Test
+        Fana.Serial.Print.Indent
+        Fana.Serial.Print.Show
 
 test-suite try
-  import : common
-  type: exitcode-stdio-1.0
-  main-is: ../TestMain.hs
+    import : common
+    type: exitcode-stdio-1.0
+    main-is: ../TestMain.hs
