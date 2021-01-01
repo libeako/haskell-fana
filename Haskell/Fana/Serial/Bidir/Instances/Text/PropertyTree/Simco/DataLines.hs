@@ -1,6 +1,6 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines
 (
-	SemanticCommon (..), Semantic (..), Node (..),
+	Semantic (..), Node (..),
 	process_Node,
 	delete_not_active_from_forest,
 	forest_to_map,
@@ -22,9 +22,7 @@ type Text = String
 type Name = Text
 type PropertyAtomValue = Text
 
-data SemanticCommon = SemanticCommon { is_active :: Bool, name :: Name } 
-	deriving Eq
-data Semantic = Atom SemanticCommon PropertyAtomValue | Composite SemanticCommon
+data Semantic = Semantic { is_active :: Bool, name :: Name, value :: Maybe Text }
 	deriving Eq
 data Node = MakeSemantic Semantic | MakeComment Text
 	deriving Eq
@@ -44,19 +42,11 @@ delete_not_active_from_tree :: Base.Tree Node -> ActiveForest
 delete_not_active_from_tree (Base.Node trunk children) =
 	case trunk of
 		MakeComment _ -> []
-		MakeSemantic meaningful -> 
+		MakeSemantic (Semantic False _ _) -> []
+		MakeSemantic (Semantic _ name' value') ->
 			let
-				answer :: 
-					SemanticCommon -> 
-					DiscrTree.Discrimination [] PropertyAtomValue () 
-						(FanaTree.Tree (DiscrTree.Discrimination [] PropertyAtomValue ()) Name) -> 
-					ActiveForest
-				answer (SemanticCommon is_active' name') node_specific_part = 
-					if is_active' then [FanaTree.assemble name' node_specific_part] else []
-				in
-					case meaningful of
-						Atom common value -> answer common (DiscrTree.Leaf value)
-						Composite common -> answer common (DiscrTree.Joint () (delete_not_active_from_forest children))
+				node_specific_part = maybe (DiscrTree.Joint () (delete_not_active_from_forest children)) DiscrTree.Leaf value'
+				in [FanaTree.assemble name' node_specific_part]
 
 delete_not_active_from_forest :: Base.Forest Node -> ActiveForest
 delete_not_active_from_forest = map delete_not_active_from_tree >>> Base.concat

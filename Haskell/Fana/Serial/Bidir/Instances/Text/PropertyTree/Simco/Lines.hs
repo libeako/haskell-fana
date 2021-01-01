@@ -53,22 +53,6 @@ serializer_name_char =
 
 serializer_name :: Fana.ExistsConversion p Char => Serializer p Text
 serializer_name = Lang.trier_multiple serializer_name_char
-
-serializer_meaningful_common :: 
-	forall p . Fana.ExistsConversion p Char => Serializer p Data.SemanticCommon
-serializer_meaningful_common =
-	let
-		raw_rule :: Serializer p (Bool, Text)
-		raw_rule = Lang.product (serializer_activity, serializer_name)
-		isomorphism :: Optic.Iso' (Bool, Text) Data.SemanticCommon
-		isomorphism = 
-			let
-				to_raw :: Data.SemanticCommon -> (Bool, Text)
-				to_raw (Data.SemanticCommon is_active name) = (is_active, name)
-				from_raw :: (Bool, Text) -> Data.SemanticCommon
-				from_raw = uncurry Data.SemanticCommon
-				in Optic.Iso to_raw from_raw
-		in Lang.extend_with_iso isomorphism raw_rule
 		
 serializer_value :: Fana.ExistsConversion p Char => Serializer p Text
 serializer_value = Lang.trier_multiple Lang.atom
@@ -85,17 +69,19 @@ serializer_meaningful_line ::
 	forall p . Fana.ExistsConversion p Char => Serializer p Data.Semantic
 serializer_meaningful_line = 
 	let
-		raw_rule :: Serializer p (Data.SemanticCommon, Maybe Text)
-		raw_rule = Lang.product (serializer_meaningful_common, Lang.trier serializer_assignment)
-		isomorphism :: Optic.Iso' (Data.SemanticCommon, Maybe Text) Data.Semantic
+		raw_rule :: Serializer p ((Bool, Text), Maybe Text)
+		raw_rule = Lang.product (Lang.product (serializer_activity, serializer_name), Lang.trier serializer_assignment)
+		isomorphism :: Optic.Iso' ((Bool, Text), Maybe Text) Data.Semantic
 		isomorphism = 
-			let 
-				from_raw (common, mb_propert_value) = 
-					Base.maybe (Data.Composite common) (Data.Atom common) mb_propert_value
-				to_raw = 
-					\case
-						Data.Composite common -> (common, Nothing)
-						Data.Atom common property_value -> (common, Just property_value)
+			let
+				from_raw :: ((Bool, Text), Maybe Text) -> Data.Semantic
+				from_raw ((is_active, name), mb_propert_value) =
+					Base.maybe 
+						(Data.Semantic is_active name Nothing)
+						(\ v -> (Data.Semantic is_active name (Just v)))
+						mb_propert_value
+				to_raw :: Data.Semantic -> ((Bool, Text), Maybe Text)
+				to_raw (Data.Semantic is_active name value) = ((is_active, name), value)
 				in Optic.Iso to_raw from_raw
 		in Lang.extend_with_iso isomorphism raw_rule
 
@@ -150,9 +136,8 @@ serializer_meaningful_line_test =
 	Test.single "serializer_meaningful_line" 
 		(
 			SerialTest.test_serializer serializer_meaningful_line
-				[
-					Data.Composite (Data.SemanticCommon True "food"), 
-					Data.Atom (Data.SemanticCommon False "food") "apple"
+				[ Data.Semantic True "food" Nothing
+				, Data.Semantic False "food" (Just "apple")
 				]
 				[]
 		)
@@ -162,9 +147,8 @@ serializer_line_test =
 	Test.single "serializer_line"
 		(
 			SerialTest.test_serializer serializer_line
-				[
-				Data.MakeComment "comm",
-				Data.MakeSemantic (Data.Composite (Data.SemanticCommon True "apple"))
+				[ Data.MakeComment "comm"
+				, Data.MakeSemantic (Data.Semantic True "apple" Nothing)
 				]
 				["/ "]
 		)

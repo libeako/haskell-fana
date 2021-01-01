@@ -1,6 +1,6 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataRender
 (
-	render_tree, render_forest,
+	render,
 )
 where
 
@@ -8,31 +8,22 @@ import Fana.Prelude
 import Data.Tree (Tree (..))
 import Prelude (String)
 
-import qualified Data.Foldable as Foldable
 import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as High -- high level data
 import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines as Low -- low level data
 
 
 type Text = String
 
-meaningful_common_render :: High.SemanticCommon -> Low.SemanticCommon
-meaningful_common_render (High.SemanticCommon is_active name comments) = Low.SemanticCommon is_active name
-
-render_tree :: High.Tree -> [Tree Low.Node]
-render_tree =
-	\case
-		High.MakeSemantic mn -> 
-			case mn of
-				High.MakeAtom meaningful_common value -> 
-					let node_data = Low.MakeSemantic (Low.Atom (meaningful_common_render meaningful_common) value)
-					in [Node node_data ((map <<< map) Low.MakeComment (High.comment meaningful_common))]
-				High.MakeComposite meaningful_common children ->
-					let trunk = Low.MakeSemantic (Low.Composite (meaningful_common_render meaningful_common))
-					in [Node trunk (render_forest children)]
-		High.MakeComment comment_tree -> []
-
-render_forest :: [High.Tree] -> [Tree Low.Node]
-render_forest = map render_tree >>> Foldable.concat
-
-
+render :: High.Tree -> Tree Low.Node
+render =
+	\ case
+		High.MakeSemantic (High.Semantic is_active name comment value) -> 
+			case value of
+				High.MakeAtom text -> 
+					let node_data = Low.MakeSemantic (Low.Semantic is_active name (Just text))
+						in (Node node_data ((map <<< map) Low.MakeComment comment))
+				High.MakeComposite children ->
+					let trunk = Low.MakeSemantic (Low.Semantic is_active name Nothing)
+						in Node trunk (map render children)
+		High.MakeComment comments -> map Low.MakeComment comments
 
