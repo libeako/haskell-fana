@@ -2,7 +2,7 @@ module Main where
 
 import qualified System.IO as Sys
 
-import Fana.Develop.Test.Define (Test(..))
+import Fana.Develop.Test.Define (Test (..))
 import Fana.Prelude
 
 import qualified Fana.Develop.Test.Define as Test
