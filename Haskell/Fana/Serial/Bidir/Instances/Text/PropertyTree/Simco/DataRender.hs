@@ -15,23 +15,23 @@ import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines a
 
 type Text = String
 
-meaningful_common_render :: High.MeaningfulCommon -> Low.MeaningfulCommon
-meaningful_common_render (High.MeaningfulCommon is_active name) = Low.MeaningfulCommon is_active name
+meaningful_common_render :: High.SemanticCommon -> Low.MeaningfulCommon
+meaningful_common_render (High.SemanticCommon is_active name comments) = Low.MeaningfulCommon is_active name
 
-render_tree :: High.Node -> [Tree Low.Node]
+render_tree :: High.Tree -> [Tree Low.Node]
 render_tree =
 	\case
-		High.NodeMeaningful mn -> 
+		High.MakeSemantic mn -> 
 			case mn of
-				High.MnProperty meaningful_common value children -> 
+				High.MakeProperty meaningful_common value -> 
 					let node_data = Low.NodeMeaningful (Low.NodeProperty (meaningful_common_render meaningful_common) value)
-					in [Node node_data ((map <<< map) Low.NodeComment children)]
-				High.MnCategory meaningful_common children ->
+					in [Node node_data ((map <<< map) Low.NodeComment (High.comment meaningful_common))]
+				High.MakeCategory meaningful_common children ->
 					let trunk = Low.NodeMeaningful (Low.NodeCategory (meaningful_common_render meaningful_common))
 					in [Node trunk (render_forest children)]
-		High.NodeComment comment_tree -> []
+		High.MakeComment comment_tree -> []
 
-render_forest :: [High.Node] -> [Tree Low.Node]
+render_forest :: [High.Tree] -> [Tree Low.Node]
 render_forest = map render_tree >>> Foldable.concat
 
 

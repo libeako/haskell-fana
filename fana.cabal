@@ -1,7 +1,7 @@
 cabal-version: 3.0
 
 name:           fana
-version:        0.0.0.148
+version:        0.0.0.149
 synopsis:       some commonly useful stuff
 license-file:   _license_.txt
 build-type:     Simple
