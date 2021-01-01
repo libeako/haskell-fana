@@ -55,18 +55,18 @@ serializer_name :: Fana.ExistsConversion p Char => Serializer p Text
 serializer_name = Lang.trier_multiple serializer_name_char
 
 serializer_meaningful_common :: 
-	forall p . Fana.ExistsConversion p Char => Serializer p Data.MeaningfulCommon
+	forall p . Fana.ExistsConversion p Char => Serializer p Data.SemanticCommon
 serializer_meaningful_common =
 	let
 		raw_rule :: Serializer p (Bool, Text)
 		raw_rule = Lang.product (serializer_activity, serializer_name)
-		isomorphism :: Optic.Iso' (Bool, Text) Data.MeaningfulCommon
+		isomorphism :: Optic.Iso' (Bool, Text) Data.SemanticCommon
 		isomorphism = 
 			let
-				to_raw :: Data.MeaningfulCommon -> (Bool, Text)
-				to_raw (Data.MeaningfulCommon is_active name) = (is_active, name)
-				from_raw :: (Bool, Text) -> Data.MeaningfulCommon
-				from_raw = uncurry Data.MeaningfulCommon
+				to_raw :: Data.SemanticCommon -> (Bool, Text)
+				to_raw (Data.SemanticCommon is_active name) = (is_active, name)
+				from_raw :: (Bool, Text) -> Data.SemanticCommon
+				from_raw = uncurry Data.SemanticCommon
 				in Optic.Iso to_raw from_raw
 		in Lang.extend_with_iso isomorphism raw_rule
 		
@@ -82,20 +82,20 @@ serializer_assignment =
 		in Lang.extend_with_iso iso raw_rule
 
 serializer_meaningful_line :: 
-	forall p . Fana.ExistsConversion p Char => Serializer p Data.MeaningfulNode
+	forall p . Fana.ExistsConversion p Char => Serializer p Data.Semantic
 serializer_meaningful_line = 
 	let
-		raw_rule :: Serializer p (Data.MeaningfulCommon, Maybe Text)
+		raw_rule :: Serializer p (Data.SemanticCommon, Maybe Text)
 		raw_rule = Lang.product (serializer_meaningful_common, Lang.trier serializer_assignment)
-		isomorphism :: Optic.Iso' (Data.MeaningfulCommon, Maybe Text) Data.MeaningfulNode
+		isomorphism :: Optic.Iso' (Data.SemanticCommon, Maybe Text) Data.Semantic
 		isomorphism = 
 			let 
 				from_raw (common, mb_propert_value) = 
-					Base.maybe (Data.NodeCategory common) (Data.NodeProperty common) mb_propert_value
+					Base.maybe (Data.Composite common) (Data.Atom common) mb_propert_value
 				to_raw = 
 					\case
-						Data.NodeCategory common -> (common, Nothing)
-						Data.NodeProperty common property_value -> (common, Just property_value)
+						Data.Composite common -> (common, Nothing)
+						Data.Atom common property_value -> (common, Just property_value)
 				in Optic.Iso to_raw from_raw
 		in Lang.extend_with_iso isomorphism raw_rule
 
@@ -111,13 +111,13 @@ serializer_line ::
 	forall p . (Fana.Showable Text p, Fana.ExistsConversion p Char) => Serializer p Data.Node
 serializer_line =
 	let
-		raw_rule :: Serializer p (Either Text Data.MeaningfulNode)
+		raw_rule :: Serializer p (Either Text Data.Semantic)
 		raw_rule = Lang.sum (serializer_comment, serializer_meaningful_line)
-		isomorphism :: Optic.Iso' (Either Text Data.MeaningfulNode) Data.Node
+		isomorphism :: Optic.Iso' (Either Text Data.Semantic) Data.Node
 		isomorphism = 
 			let
 				to_raw = Data.process_Node Right Left
-				from_raw = Base.either Data.NodeComment Data.NodeMeaningful
+				from_raw = Base.either Data.MakeComment Data.MakeSemantic
 				in Optic.Iso to_raw from_raw
 			in Lang.whole (Lang.extend_with_iso isomorphism raw_rule)
 
@@ -151,8 +151,8 @@ serializer_meaningful_line_test =
 		(
 			SerialTest.test_serializer serializer_meaningful_line
 				[
-					Data.NodeCategory (Data.MeaningfulCommon True "food"), 
-					Data.NodeProperty (Data.MeaningfulCommon False "food") "apple"
+					Data.Composite (Data.SemanticCommon True "food"), 
+					Data.Atom (Data.SemanticCommon False "food") "apple"
 				]
 				[]
 		)
@@ -163,8 +163,8 @@ serializer_line_test =
 		(
 			SerialTest.test_serializer serializer_line
 				[
-				Data.NodeComment "comm",
-				Data.NodeMeaningful (Data.NodeCategory (Data.MeaningfulCommon True "apple"))
+				Data.MakeComment "comm",
+				Data.MakeSemantic (Data.Composite (Data.SemanticCommon True "apple"))
 				]
 				["/ "]
 		)

@@ -2,7 +2,7 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data
 (
 	Comment, Tree (..), SemanticCommon (..), Semantic (..), 
-	make_simple_comment, make_property, make_category,
+	make_simple_comment, make_atom, make_composite,
 )
 where
 
@@ -22,8 +22,8 @@ type Comment = Base.Tree String
 data Tree = MakeSemantic Semantic | MakeComment Comment
 -- | The common part of semantic nodes.
 data SemanticCommon = SemanticCommon { is_active :: Bool, name :: String, comment :: [Comment] }
--- | Tree that contains meaningful data, that is - not simple_comment.
-data Semantic = MakeCategory SemanticCommon [Tree] | MakeProperty SemanticCommon String
+-- | Tree that contains meaningful data, that is - not comment.
+data Semantic = MakeAtom SemanticCommon String | MakeComposite SemanticCommon [Tree]
 
 
 -- * Helper constructors
@@ -33,8 +33,8 @@ data Semantic = MakeCategory SemanticCommon [Tree] | MakeProperty SemanticCommon
 make_simple_comment :: String -> Tree
 make_simple_comment = flip Base.Node [] >>> MakeComment
 
-make_property :: String -> String -> [Comment] -> Tree
-make_property name' value comments = MakeSemantic (MakeProperty (SemanticCommon True name' comments) value)
+make_atom :: String -> String -> [Comment] -> Tree
+make_atom name' value comments = MakeSemantic (MakeAtom (SemanticCommon True name' comments) value)
 
-make_category :: String -> [Tree] -> [Comment] -> Tree
-make_category name' content comments = MakeSemantic (MakeCategory (SemanticCommon True name' comments) content)
+make_composite :: String -> [Tree] -> [Comment] -> Tree
+make_composite name' content comments = MakeSemantic (MakeComposite (SemanticCommon True name' comments) content)

@@ -15,19 +15,19 @@ import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines a
 
 type Text = String
 
-meaningful_common_render :: High.SemanticCommon -> Low.MeaningfulCommon
-meaningful_common_render (High.SemanticCommon is_active name comments) = Low.MeaningfulCommon is_active name
+meaningful_common_render :: High.SemanticCommon -> Low.SemanticCommon
+meaningful_common_render (High.SemanticCommon is_active name comments) = Low.SemanticCommon is_active name
 
 render_tree :: High.Tree -> [Tree Low.Node]
 render_tree =
 	\case
 		High.MakeSemantic mn -> 
 			case mn of
-				High.MakeProperty meaningful_common value -> 
-					let node_data = Low.NodeMeaningful (Low.NodeProperty (meaningful_common_render meaningful_common) value)
-					in [Node node_data ((map <<< map) Low.NodeComment (High.comment meaningful_common))]
-				High.MakeCategory meaningful_common children ->
-					let trunk = Low.NodeMeaningful (Low.NodeCategory (meaningful_common_render meaningful_common))
+				High.MakeAtom meaningful_common value -> 
+					let node_data = Low.MakeSemantic (Low.Atom (meaningful_common_render meaningful_common) value)
+					in [Node node_data ((map <<< map) Low.MakeComment (High.comment meaningful_common))]
+				High.MakeComposite meaningful_common children ->
+					let trunk = Low.MakeSemantic (Low.Composite (meaningful_common_render meaningful_common))
 					in [Node trunk (render_forest children)]
 		High.MakeComment comment_tree -> []
 

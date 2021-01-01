@@ -1,6 +1,6 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines
 (
-	MeaningfulCommon (..), MeaningfulNode (..), Node (..),
+	SemanticCommon (..), Semantic (..), Node (..),
 	process_Node,
 	delete_not_active_from_forest,
 	forest_to_map,
@@ -8,7 +8,6 @@ module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines
 where
 
 import Fana.Prelude
-import Fana.Data.Tree.Uniform (Tree (..))
 import Prelude (String)
 
 import qualified Data.Foldable as Base
@@ -21,42 +20,43 @@ import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Data as PropTree
 
 type Text = String
 type Name = Text
-type PropertyValue = Text
+type PropertyAtomValue = Text
 
-data MeaningfulCommon = MeaningfulCommon { mnIsActive :: Bool, mnName :: Name } deriving Eq
-data MeaningfulNode = NodeCategory MeaningfulCommon | NodeProperty MeaningfulCommon PropertyValue
+data SemanticCommon = SemanticCommon { is_active :: Bool, name :: Name } 
 	deriving Eq
-data Node = NodeMeaningful MeaningfulNode | NodeComment Text
+data Semantic = Atom SemanticCommon PropertyAtomValue | Composite SemanticCommon
+	deriving Eq
+data Node = MakeSemantic Semantic | MakeComment Text
 	deriving Eq
 
-process_Node :: (MeaningfulNode -> r) -> (Text -> r) -> Node -> r
+process_Node :: (Semantic -> r) -> (Text -> r) -> Node -> r
 process_Node on_meaningful on_comment = 
 	\ case
-		NodeMeaningful d -> on_meaningful d
-		NodeComment d -> on_comment d
+		MakeSemantic d -> on_meaningful d
+		MakeComment d -> on_comment d
 
 
 -- * filtering the active nodes :
 
-type ActiveForest = [DiscrTree.Tree [] PropertyValue () Name]
+type ActiveForest = [DiscrTree.Tree [] PropertyAtomValue () Name]
 
 delete_not_active_from_tree :: Base.Tree Node -> ActiveForest
 delete_not_active_from_tree (Base.Node trunk children) =
 	case trunk of
-		NodeComment _ -> []
-		NodeMeaningful meaningful -> 
+		MakeComment _ -> []
+		MakeSemantic meaningful -> 
 			let
 				answer :: 
-					MeaningfulCommon -> 
-					DiscrTree.Discrimination [] PropertyValue () 
-						(Tree (DiscrTree.Discrimination [] PropertyValue ()) Name) -> 
+					SemanticCommon -> 
+					DiscrTree.Discrimination [] PropertyAtomValue () 
+						(FanaTree.Tree (DiscrTree.Discrimination [] PropertyAtomValue ()) Name) -> 
 					ActiveForest
-				answer (MeaningfulCommon is_active name) node_specific_part = 
-					if is_active then [FanaTree.assemble name node_specific_part] else []
+				answer (SemanticCommon is_active' name') node_specific_part = 
+					if is_active' then [FanaTree.assemble name' node_specific_part] else []
 				in
 					case meaningful of
-						NodeProperty common value -> answer common (DiscrTree.Leaf value)
-						NodeCategory common -> answer common (DiscrTree.Joint () (delete_not_active_from_forest children))
+						Atom common value -> answer common (DiscrTree.Leaf value)
+						Composite common -> answer common (DiscrTree.Joint () (delete_not_active_from_forest children))
 
 delete_not_active_from_forest :: Base.Forest Node -> ActiveForest
 delete_not_active_from_forest = map delete_not_active_from_tree >>> Base.concat
@@ -65,15 +65,15 @@ delete_not_active_from_forest = map delete_not_active_from_tree >>> Base.concat
 -- * mapping :
 
 from_tree_to_key_value_at :: 
-	[Name] -> DiscrTree.Tree [] PropertyValue () Name -> (Name, PropTree.Property)
+	[Name] -> DiscrTree.Tree [] PropertyAtomValue () Name -> (Name, PropTree.Property)
 from_tree_to_key_value_at path = 
 	FanaTree.structure >>> 
 	\ case 
-		(name, node_specific) ->
+		(name', node_specific) ->
 			case node_specific of
-				DiscrTree.Leaf property_value -> (name, PropTree.Single property_value)
+				DiscrTree.Leaf property_value -> (name', PropTree.Single property_value)
 				DiscrTree.Joint _ children -> 
-					(PropTree.Composite >>> Pair.after name) (forest_to_map_at (name : path) children)
+					(PropTree.Composite >>> Pair.after name') (forest_to_map_at (name' : path) children)
 
 forest_to_map_at :: [Name] -> ActiveForest -> PropTree.PropertyList
 forest_to_map_at path = map (from_tree_to_key_value_at path)
