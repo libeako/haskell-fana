@@ -1,24 +1,26 @@
 module Fana.Serial.Bidir.Instances.Text.Indent
 (
-    IndentDepth, LineWithIndent, 
-    line_with_indent,
-    lines_with_indent,
+	IndentDepth, LineWithIndent, 
+	line_with_indent,
+	lines_with_indent,
+	TextTreeSerializer, text_tree,
 )
 where
 
+import Fana.Haskell.DescribingClass
 import Fana.Math.Algebra.Category.OnTypePairs ((>**>))
 import Fana.Prelude
 import Prelude (Char, String)
 
 import qualified Data.Bifunctor as Bifunctor
 import qualified Data.List as List
+import qualified Data.Tree as Base
 import qualified Fana.Data.Tree.SerializeHight as TreeSerial
 import qualified Fana.Optic.Concrete.Categories.Iso as Optic
+import qualified Fana.Optic.Concrete.Categories.PartialIso as Optic
 import qualified Fana.Serial.Bidir.Instances.Text.Lines as Serial
-import qualified Fana.Serial.Bidir.Serializer as Serial
 
 
-type Serializer v = Serial.Serializer () Char v
 type IndentDepth = TreeSerial.Hight
 type LineWithIndent = (IndentDepth, String)
 
@@ -38,3 +40,10 @@ lines_with_indent :: Optic.Iso' String [LineWithIndent]
 lines_with_indent = Serial.lines >**> Optic.iso_up line_with_indent
 
 
+type TextTreeSerializer l h = Optic.PartialIso (TreeSerial.HightListParseError String) l l h h
+
+layer_indentation :: TextTreeSerializer String [(TreeSerial.Hight, String)]
+layer_indentation = convert_from_describing_class_4 lines_with_indent
+
+text_tree :: TextTreeSerializer String [Base.Tree String]
+text_tree = layer_indentation >**> TreeSerial.serializer
