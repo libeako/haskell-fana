@@ -21,7 +21,7 @@ render :: High.Forest -> [Tree Low.Node]
 render =
 	map 
 		(
-			DTree.map_to_homo'
+			DTree.homogenize
 				(\ (High.SemanticNode is_active name comment) value -> Low.Semantic is_active name (Just value))
 				(\ (High.SemanticNode is_active name comment) () -> Low.Semantic is_active name Nothing)
 		)
