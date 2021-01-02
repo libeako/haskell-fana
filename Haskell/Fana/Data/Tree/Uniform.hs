@@ -9,6 +9,7 @@ module Fana.Data.Tree.Uniform
 	structure,
 	trunk_content, children,
 	assemble,
+	map_children_container,
 	-- * Path
 	Path, TreeWithPaths, with_paths,
 )
@@ -20,6 +21,7 @@ import Prelude (fmap)
 
 import qualified Fana.Data.HeteroPair as Pair
 import qualified Fana.Data.Recurse as Recurse
+import qualified Fana.Haskell.Wrap as Wrap
 import qualified Fana.Optic.Concrete.Prelude as Optic
 
 {-|
@@ -31,6 +33,9 @@ data Node e s r = Node { node_content :: e, subtrees :: s r }
 
 in_node_content :: Optic.Lens e1 e2 (Node e1 s t) (Node e2 s t)
 in_node_content = Optic.lens_from_get_set node_content (\ l h -> h { node_content = l})
+
+in_node_subtrees :: Optic.Lens (s1 t1) (s2 t2) (Node e s1 t1) (Node e s2 t2)
+in_node_subtrees = Optic.lens_from_get_set subtrees (\ l h -> h { subtrees = l})
 
 {-|
 	A tree containing data elements in each node.
@@ -74,6 +79,11 @@ trunk_content = unwrapTree >>> node_content
 children :: Tree s e -> s (Tree s e)
 children (Tree (Node _ s)) = s
 
+map_children_container :: (Functor so, Functor sn) => (forall r . so r -> sn r) -> Tree so e -> Tree sn e
+map_children_container f = Wrap.over (Optic.fn_up in_node_subtrees (map (map_children_container f) >>> f))
+
+
+-- * Paths
 
 {-|
 	Path of a node in the tree

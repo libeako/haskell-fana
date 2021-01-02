@@ -4,7 +4,7 @@ module Fana.Data.Tree.Discriminating
 	Tree, Forest, Discrimination (..),
 	assemble, leaf, joint,
 	-- * Map
-	map_all, map_to_homo,
+	map_all, map_to_homo, map_to_homo',
 	-- * Filter
 	commons, leafs,
 	-- * Else
@@ -14,6 +14,7 @@ where
 
 
 import Control.Category as Category hiding (id)
+import Fana.Data.CollectionWithEmpty
 import Fana.Prelude
 
 import qualified Data.Tree as Homo
@@ -60,6 +61,12 @@ subtrees_in_Discrimination =
 		Leaf _ -> []
 		Joint _ cs -> toList cs
 
+subtrees_in_Discrimination' :: CollWithEmpty b => Discrimination b l j r -> b r
+subtrees_in_Discrimination' =
+	\ case
+		Leaf _ -> empty_coll
+		Joint _ cs -> cs
+
 {-|
 	Tree containing elements
 	of type 'l' in leafs, of type 'j' in joints [in container type 'b'], of type 'e' in all kinds of nodes.
@@ -85,6 +92,14 @@ commons =
 	let
 		algebra :: Node b l j e (Homo.Tree e) -> Homo.Tree e
 		algebra (Uniform.Node e d) = Homo.Node e (subtrees_in_Discrimination d)
+		in Recurse.cata algebra
+
+{-| Strips the tree of all the discriminated data. -}
+commons' :: forall b l j e . (Functor b, CollWithEmpty b) => Tree b l j e -> Uniform.Tree b e
+commons' =
+	let
+		algebra :: Node b l j e (Uniform.Tree b e) -> Uniform.Tree b e
+		algebra (Uniform.Node e d) = Uniform.Tree (Uniform.Node e (subtrees_in_Discrimination' d))
 		in Recurse.cata algebra
 
 leafs :: Functor b => Tree b l j e -> Leafy.Tree b l
@@ -126,6 +141,18 @@ map_to_homo fl fj =
 		decorate = Pair.before ()
 		in map_all (change_fn fl) (change_fn fj) >>> commons
 
+{-| Mapp to a homogeneous tree. -}
+map_to_homo' ::
+	forall o b il ij ie .
+	(Functor b, CollWithEmpty b) =>
+	(ie -> il -> o) -> (ie -> ij -> o) ->
+	Tree b il ij ie -> Uniform.Tree b o
+map_to_homo' fl fj =
+	let
+		change_fn :: (x -> y -> r) -> ((x, y) -> (r, ()))
+		change_fn = uncurry >>> map (Pair.before ())
+		decorate = Pair.before ()
+		in map_all (change_fn fl) (change_fn fj) >>> commons'
 
 -- * copy common data to descriminated data
 
