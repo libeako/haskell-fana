@@ -1,39 +1,50 @@
 -- | Data structure of the abstract syntax of the Simco language.
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data
 (
-	Comment, Tree (..), PropertyValue (..), Semantic (..), 
+	ItemStructure (..), ItemsStructure (..), TreeStructure (..), ForestStructure (..),
+	CommentTree, Item (..), SemanticNode (..), SemanticTree (..), Forest,
 	make_simple_comment, make_atom, make_composite,
 )
 where
 
+import Fana.Data.CollectionWithEmpty
 import Fana.Prelude
 import Prelude (String)
 
+import qualified Data.List as List
 import qualified Data.Tree as Base
+import qualified Fana.Data.Tree.Discriminating as DTree
+
 
 {-|
 	Data structure of a simple_comment. 
 	
 	Comment has tree structure too.
 -}
-type Comment = Base.Tree String 
+type CommentTree = Base.Tree String
+data SemanticNode = SemanticNode { is_active :: Bool, name :: String, comment :: [CommentTree] }
+-- | The forest container.
+data ItemStructure r = MakeSemantic r | MakeComment CommentTree
+	deriving Functor
+newtype ItemsStructure r = ItemsStructure { deItemsStructure :: [ItemStructure r] } 
+	deriving Functor
+type TreeStructure e = DTree.Tree ItemsStructure String () e
+type ForestStructure e = DTree.Forest ItemsStructure String () e
+type SemanticTree = TreeStructure SemanticNode
+type Forest = ForestStructure SemanticNode
+type Item = ItemStructure SemanticTree
 
--- | The recursive part of the data structure.
-data Tree = MakeSemantic Semantic | MakeComment Comment
--- | Tree that contains meaningful data, that is - not comment.
-data Semantic = Semantic { is_active :: Bool, name :: String, comment :: [Comment], value :: PropertyValue }
-data PropertyValue = MakeAtom String | MakeComposite [Tree]
-
+instance CollWithEmpty ItemsStructure where
+	empty_coll = ItemsStructure []
+	is_coll_empty = deItemsStructure >>> List.null
 
 -- * Helper constructors
 
--- | Just a different name for the regular 'Node' constructor for a simple comment,
--- one that is consistent with other helper constructors.
-make_simple_comment :: String -> Tree
+make_simple_comment :: String -> Item
 make_simple_comment = flip Base.Node [] >>> MakeComment
 
-make_atom :: String -> String -> [Comment] -> Tree
-make_atom name' value' comments = MakeSemantic (Semantic True name' comments (MakeAtom value'))
+make_atom :: String -> String -> [CommentTree] -> Item
+make_atom name' value' comments = MakeSemantic (DTree.leaf (SemanticNode True name' comments) value')
 
-make_composite :: String -> [Tree] -> [Comment] -> Tree
-make_composite name' content comments = MakeSemantic (Semantic True name' comments (MakeComposite content))
+make_composite :: String -> Forest -> [CommentTree] -> Item
+make_composite name' children comments = MakeSemantic (DTree.joint (SemanticNode True name' comments) () children)
