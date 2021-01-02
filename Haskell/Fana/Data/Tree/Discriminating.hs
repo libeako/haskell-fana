@@ -1,7 +1,7 @@
 -- | Tree with different joint and leaf data type.
 module Fana.Data.Tree.Discriminating
 (
-	Tree (..), Discrimination (..),
+	Tree, Forest, Discrimination (..),
 	assemble, leaf, joint,
 	-- * Map
 	map_all, map_to_homo,
@@ -62,9 +62,10 @@ subtrees_in_Discrimination =
 
 {-|
 	Tree containing elements
-	of type 'l' in leafs, of type 'j' in joints, of type 'e' in all kinds of nodes.
+	of type 'l' in leafs, of type 'j' in joints [in container type 'b'], of type 'e' in all kinds of nodes.
 -}
 type Tree b l j e = Uniform.Tree (Discrimination b l j) e
+type Forest b l j e = b (Tree b l j e)
 
 type NodeType b l j e = Node b l j e (Tree b l j e)
 
