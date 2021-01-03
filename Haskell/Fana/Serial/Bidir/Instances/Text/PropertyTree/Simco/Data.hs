@@ -22,7 +22,7 @@ import qualified Fana.Data.Tree.Discriminating as DTree
 	Comment has tree structure too.
 -}
 type CommentTree = Base.Tree String
-data SemanticNode = SemanticNode { is_active :: Bool, name :: String, comment :: [CommentTree] }
+data SemanticNode = SemanticNode { is_active :: Bool, name :: String }
 -- | The forest container.
 data ItemStructure r = MakeSemantic r | MakeComment CommentTree
 	deriving Functor
@@ -43,8 +43,8 @@ instance CollWithEmpty ItemsStructure where
 make_simple_comment :: String -> Item
 make_simple_comment = flip Base.Node [] >>> MakeComment
 
-make_atom :: String -> String -> [CommentTree] -> Item
-make_atom name' value' comments = MakeSemantic (DTree.leaf (SemanticNode True name' comments) value')
+make_atom :: String -> String -> Item
+make_atom name' value' = MakeSemantic (DTree.leaf (SemanticNode True name') value')
 
-make_composite :: String -> Forest -> [CommentTree] -> Item
-make_composite name' children comments = MakeSemantic (DTree.joint (SemanticNode True name' comments) () children)
+make_composite :: String -> Forest -> Item
+make_composite name' children = MakeSemantic (DTree.joint (SemanticNode True name') () children)
