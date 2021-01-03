@@ -23,9 +23,9 @@ import qualified Fana.Data.Tree.Discriminating as DTree
 -}
 type CommentTree = Base.Tree String
 data SemanticNode = SemanticNode { is_active :: Bool, name :: String }
--- | The forest container.
 data ItemStructure r = MakeSemantic r | MakeComment CommentTree
 	deriving Functor
+-- | The forest container.
 newtype ItemsStructure r = ItemsStructure { deItemsStructure :: [ItemStructure r] } 
 	deriving Functor
 type TreeStructure e = DTree.Tree ItemsStructure String () e
@@ -37,6 +37,7 @@ type Item = ItemStructure SemanticTree
 instance CollWithEmpty ItemsStructure where
 	empty_coll = ItemsStructure []
 	is_coll_empty = deItemsStructure >>> List.null
+
 
 -- * Helper constructors
 
