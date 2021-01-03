@@ -4,6 +4,7 @@ module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines
 	Name, PropertyAtomValue,
 	Semantic (..), Node (..),
 	process_Node,
+	make_atom,
 	forest_to_map,
 )
 where
@@ -32,6 +33,19 @@ process_Node on_meaningful on_comment =
 	\ case
 		MakeSemantic d -> on_meaningful d
 		MakeComment d -> on_comment d
+
+
+-- * Helper constructors
+
+-- ~ make_simple_comment :: String -> _
+-- ~ make_simple_comment = _
+
+make_atom :: String -> String -> Node
+make_atom name' value' = MakeSemantic (Semantic True name' (Just value'))
+
+-- ~ make_composite :: String -> Forest -> _
+-- ~ make_composite name' children = _
+
 
 
 -- * Filtering the active nodes
