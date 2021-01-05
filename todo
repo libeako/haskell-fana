@@ -1,0 +1,5 @@
+Optic
+	Iso, PartialIso
+		They should be just products of composable arrows, augmented with a proof of [partial] isomorphism.
+Simco
+	The isomorphisms that drop activities and comments are not really isomorphisms. It is a lie. The code should better express the reality.
