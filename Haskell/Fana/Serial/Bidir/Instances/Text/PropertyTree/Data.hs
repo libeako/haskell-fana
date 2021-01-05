@@ -2,14 +2,15 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
 (
 	PropertyListStructure, PropertyStructure (..),
-	PropertyList, Property,
+	PropertyList, Property, NamedProperty,
 )
 where
 
 import Prelude (String)
 
 
-type PropertyListStructure e = [(String, PropertyStructure e)]
+type NamedProperty e = (String, PropertyStructure e)
+type PropertyListStructure e = [NamedProperty e]
 data PropertyStructure e = Single e | Composite (PropertyListStructure e)
 
 type PropertyList = PropertyListStructure String

@@ -58,13 +58,13 @@ type Layer' l h = Layer '(l, l) '(h, h)
 layer_text_tree :: Layer' Text [Base.Tree Text]
 layer_text_tree = Optic.piso_convert_error ErrorInHightListParsing Serial.text_tree
 
-layer_line :: Optic.PartialIso' [Serial.Error Char] Text SimcoDL.Node
-layer_line = Serial.to_partial_iso (Lines.serializer_line)
+layer_line :: Optic.PartialIso' [Serial.Error Char] Text SimcoDL.NodeWithActivity
+layer_line = Serial.to_partial_iso (Lines.serializer)
 
-layer_identified_line :: Layer '(Text, (LineIdentifier, Text)) '(SimcoDL.Node, SimcoDL.Node)
+layer_identified_line :: Layer '(Text, (LineIdentifier, Text)) '(SimcoDL.NodeWithActivity, SimcoDL.NodeWithActivity)
 layer_identified_line = Optic.piso_convert_error (uncurry ErrorInLineParsing) (Optic.add_for_failure layer_line)
 
-layer_lines_general :: Traversable t => Layer '(t Text, t (LineIdentifier, Text)) '(t SimcoDL.Node, t SimcoDL.Node)
+layer_lines_general :: Traversable t => Layer '(t Text, t (LineIdentifier, Text)) '(t SimcoDL.NodeWithActivity, t SimcoDL.NodeWithActivity)
 layer_lines_general = Optic.lift_piso layer_identified_line
 
 identify_lines :: Traversable t => t Text -> t (LineIdentifier, Text)
@@ -82,7 +82,7 @@ layer_lines =
 	Optic.piso_convert_all id id (Base.Compose >>> identify_lines) Base.getCompose id
 	layer_text_tree
 
-layer :: Layer' Text (Base.Forest SimcoDL.Node)
+layer :: Layer' Text (Base.Forest SimcoDL.NodeWithActivity)
 layer = 
 	Optic.piso_convert_all id id Base.getCompose Base.Compose id
 	(layer_lines >**> layer_lines_general)

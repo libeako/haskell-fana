@@ -1,38 +1,36 @@
 -- | The data structure of a single line of Simco and related stuff.
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines
 (
-	Name, PropertyAtomValue,
-	Semantic (..), Node (..),
+	Name, PropertyAtomValue, Activity (..),
+	Semantic (..), ActiveNode (..), NodeWithActivity (..),
 	process_Node,
 	make_atom,
-	forest_to_map,
+	to_props,
 )
 where
 
 import Fana.Prelude
 import Prelude (String)
 
-import qualified Data.Foldable as Base
 import qualified Data.Tree as Base
+import qualified Fana.Data.Filter as Filter
 import qualified Fana.Data.HeteroPair as Pair
-import qualified Fana.Data.Tree.Uniform as FanaTree
+import qualified Fana.Data.Recurse as Recurse
 import qualified Fana.Data.Tree.Discriminating as DiscrTree
 import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Data as PropTree
 
 
 type Name = String
 type PropertyAtomValue = String
-
-data Semantic = Semantic { is_active :: Bool, name :: Name, value :: Maybe String }
-	deriving Eq
-data Node = MakeSemantic Semantic | MakeComment String
-	deriving Eq
-
-process_Node :: (Semantic -> r) -> (String -> r) -> Node -> r
+data Activity = Active | InActive   deriving Eq
+data Semantic = Semantic { name :: Name, value :: Maybe String }   deriving Eq
+data ActiveNode = MakeSemantic Semantic | MakeComment String   deriving Eq
+process_Node :: (Semantic -> r) -> (String -> r) -> ActiveNode -> r
 process_Node on_meaningful on_comment = 
 	\ case
 		MakeSemantic d -> on_meaningful d
 		MakeComment d -> on_comment d
+type NodeWithActivity = (Activity, ActiveNode)
 
 
 -- * Helper constructors
@@ -40,8 +38,8 @@ process_Node on_meaningful on_comment =
 -- ~ make_simple_comment :: String -> _
 -- ~ make_simple_comment = _
 
-make_atom :: String -> String -> Node
-make_atom name' value' = MakeSemantic (Semantic True name' (Just value'))
+make_atom :: String -> String -> ActiveNode
+make_atom name' value' = MakeSemantic (Semantic name' (Just value'))
 
 -- ~ make_composite :: String -> Forest -> _
 -- ~ make_composite name' children = _
@@ -50,40 +48,35 @@ make_atom name' value' = MakeSemantic (Semantic True name' (Just value'))
 
 -- * Filtering the active nodes
 
-type ActiveForest = [DiscrTree.Tree [] PropertyAtomValue () Name]
+filter_tree :: forall e . Base.Tree (Maybe e) -> Maybe (Base.Tree e)
+filter_tree = 
+	let
+		step :: Base.Tree (Maybe e) -> [Maybe (Base.Tree e)] -> Maybe (Base.Tree e)
+		step old_tree new_subtrees = 
+			map
+				(\ e -> Base.Node e (Filter.filter new_subtrees))
+				(Base.rootLabel old_tree)
+		in Recurse.cata_with_original step
+filter_forest :: (eo -> Maybe en) -> [Base.Tree eo] -> [Base.Tree en]
+filter_forest f = map (map f >>> filter_tree) >>> Filter.filter
 
-keep_active_from_tree :: Base.Tree Node -> ActiveForest
-keep_active_from_tree (Base.Node trunk children) =
-	case trunk of
-		MakeComment _ -> []
-		MakeSemantic (Semantic False _ _) -> []
-		MakeSemantic (Semantic _ name' value') ->
-			let
-				node_specific_part = maybe (DiscrTree.Joint () (keep_active_from_forest children)) DiscrTree.Leaf value'
-				in [FanaTree.assemble name' node_specific_part]
+drop_inactive :: Base.Forest NodeWithActivity -> Base.Forest ActiveNode
+drop_inactive = filter_forest (\ (a, e) -> if a == Active then (Just e) else Nothing)
 
-keep_active_from_forest :: Base.Forest Node -> ActiveForest
-keep_active_from_forest = map keep_active_from_tree >>> Base.concat
+drop_comment :: Base.Forest ActiveNode -> Base.Forest Semantic
+drop_comment = filter_forest (\ case { MakeSemantic s -> Just s; _ -> Nothing })
+
+forest_to_prop_list :: Base.Forest Semantic -> PropTree.PropertyList
+forest_to_prop_list = map tree_to_prop >>> Filter.filter
+
+tree_to_prop :: Base.Tree Semantic -> Maybe (PropTree.NamedProperty String)
+tree_to_prop (Base.Node (Semantic n value') subtrees) = 
+	case forest_to_prop_list subtrees of
+		[] -> map (PropTree.Single >>> Pair.after n) value'
+		s -> Just (n, PropTree.Composite s)
 
 
--- * Mapping
+type ActiveForest = DiscrTree.Forest [] PropertyAtomValue () Name
 
-from_tree_to_key_value_at :: 
-	[Name] -> DiscrTree.Tree [] PropertyAtomValue () Name -> (Name, PropTree.Property)
-from_tree_to_key_value_at path = 
-	FanaTree.structure >>> 
-	\ case 
-		(name', node_specific) ->
-			case node_specific of
-				DiscrTree.Leaf property_value -> (name', PropTree.Single property_value)
-				DiscrTree.Joint _ children -> 
-					(PropTree.Composite >>> Pair.after name') (forest_to_map_at (name' : path) children)
-
-forest_to_map_at :: [Name] -> ActiveForest -> PropTree.PropertyList
-forest_to_map_at path = map (from_tree_to_key_value_at path)
-
-active_forest_to_map :: ActiveForest -> PropTree.PropertyList
-active_forest_to_map = forest_to_map_at []
-
-forest_to_map :: Base.Forest Node -> PropTree.PropertyList
-forest_to_map = keep_active_from_forest >>> active_forest_to_map
+to_props :: Base.Forest NodeWithActivity -> PropTree.PropertyList
+to_props = drop_inactive >>> drop_comment >>> forest_to_prop_list
