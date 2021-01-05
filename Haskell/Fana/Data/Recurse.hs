@@ -4,7 +4,7 @@ module Fana.Data.Recurse
 	StructureIsKnown (..), Recursive (..), CoRecursive (..),
 	cata, ana, para, apo, histo, futu,
 	hylo,
-	cata_with_path_to_root,
+	cata_with_original, cata_with_path_to_root,
 	change_per_node, add_path,
 )
 where
@@ -13,6 +13,7 @@ import Fana.Prelude.FromBase
 import Fana.Haskell.Wrap
 
 import qualified Data.Functor.Compose as Functor
+import qualified Data.Tree as Base
 import qualified Fana.Math.Algebra.Category.Functor.Monoidal.Monad.FreeOverFunctor as FreeOf
 import qualified Fana.Math.Algebra.Category.Functor.Pro as ProFr
 
@@ -42,9 +43,26 @@ instance Functor f => Recursive (Fix f) where
 instance Functor f => CoRecursive (Fix f) where
 	hide_structure = Fix
 
+
+instance StructureIsKnown (Base.Tree e) where
+	type StructureOf (Base.Tree e) = []
+instance Recursive (Base.Tree e) where
+	show_structure = Base.subForest
+
+
 {-| Destructing a recursive structure. -}
 cata :: Recursive r => (StructureOf r e -> e) -> (r -> e)
 cata step = show_structure >>> map (cata step) >>> step
+
+{-|
+	Destructing a recursive structure,
+	having access to the original.
+-}
+cata_with_original ::
+	forall r e . Recursive r =>
+	(r -> StructureOf r e -> e) -> (r -> e)
+cata_with_original step r =
+	step r (map (cata_with_original step) (show_structure r))
 
 {-|
 	Destructing a recursive structure,
