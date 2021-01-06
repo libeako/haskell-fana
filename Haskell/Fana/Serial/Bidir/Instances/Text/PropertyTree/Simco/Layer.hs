@@ -20,7 +20,7 @@ import qualified Fana.Data.Tree.SerializeHight as TreeSerial
 import qualified Fana.Math.Algebra.Monoid.Accumulate as Accu
 import qualified Fana.Optic.Concrete.Prelude as Optic
 import qualified Fana.Serial.Bidir.Instances.Text.Indent as Serial
-import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines as SimcoDL
+import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as SimcoDL
 import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Lines as Lines
 import qualified Fana.Serial.Bidir.Parse as Serial
 import qualified Fana.Serial.Bidir.Serializer as Serial

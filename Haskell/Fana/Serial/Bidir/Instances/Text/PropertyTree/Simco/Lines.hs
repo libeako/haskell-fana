@@ -21,7 +21,7 @@ import qualified Fana.Serial.Bidir.Instances.Conditioned as Serial
 import qualified Fana.Serial.Bidir.Instances.Maybe as Serial
 import qualified Fana.Serial.Bidir.Instances.Multiple as Serial
 import qualified Fana.Serial.Bidir.Instances.ProductSum as Serial
-import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.DataLines as Data
+import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as Data
 import qualified Fana.Serial.Bidir.Serializer as Serial
 import qualified Fana.Serial.Bidir.Test as SerialTest
 import qualified Fana.Serial.Print.Show as Fana
@@ -49,19 +49,19 @@ serializer_assignment =
 		raw = Serial.product (Serial.concrete_string " = ", serializer_value)
 		in Serial.extend_with_iso (Optic.reverse Optic.iso_with_nothing_before) raw
 
-serializer_semantic_line :: forall p . Fana.ExistsConversion p Char => Serializer p Data.Semantic
+serializer_semantic_line :: forall p . Fana.ExistsConversion p Char => Serializer p Data.ImportantNode
 serializer_semantic_line = 
 	let
 		raw :: Serializer p (Text, Maybe Text)
 		raw = Serial.product (serializer_name, Serial.trier serializer_assignment)
-		from_raw :: (Text, Maybe Text) -> Data.Semantic
+		from_raw :: (Text, Maybe Text) -> Data.ImportantNode
 		from_raw (name, mb_propert_value) =
 			Base.maybe 
-				(Data.Semantic name Nothing)
-				(Just >>> Data.Semantic name)
+				(Data.ImportantNode name Nothing)
+				(Just >>> Data.ImportantNode name)
 				mb_propert_value
-		to_raw :: Data.Semantic -> (Text, Maybe Text)
-		to_raw (Data.Semantic name value) = (name, value)
+		to_raw :: Data.ImportantNode -> (Text, Maybe Text)
+		to_raw (Data.ImportantNode name value) = (name, value)
 		in Serial.extend_with_iso (Optic.Iso to_raw from_raw) raw
 
 serializer_comment :: forall p . Fana.ExistsConversion p Char => Serializer p Text
@@ -75,13 +75,13 @@ serializer_comment =
 serializer_active_line :: forall p . (Fana.Showable Text p, Fana.ExistsConversion p Char) => Serializer p Data.ActiveNode
 serializer_active_line =
 	let
-		raw :: Serializer p (Either Text Data.Semantic)
+		raw :: Serializer p (Either Text Data.ImportantNode)
 		raw = Serial.sum (serializer_comment, serializer_semantic_line)
-		iso :: Optic.Iso' (Either Text Data.Semantic) Data.ActiveNode
+		iso :: Optic.Iso' (Either Text Data.ImportantNode) Data.ActiveNode
 		iso = 
 			let
-				to_raw = Data.process_Node Right Left
-				from_raw = Base.either Data.MakeComment Data.MakeSemantic
+				to_raw = Data.process_ActiveNode Right Left
+				from_raw = Base.either Data.MakeComment Data.MakeImportant
 				in Optic.Iso to_raw from_raw
 		in Serial.whole (Serial.extend_with_iso iso raw)
 
@@ -103,13 +103,13 @@ serializer_activity = Serial.extend_with_iso activity_maybe_iso (Serial.trier se
 serializer_active :: forall p . (Fana.Showable Text p, Fana.ExistsConversion p Char) => Serializer p Data.ActiveNode
 serializer_active =
 	let
-		raw :: Serializer p (Either Text Data.Semantic)
+		raw :: Serializer p (Either Text Data.ImportantNode)
 		raw = Serial.sum (serializer_comment, serializer_semantic_line)
-		iso :: Optic.Iso' (Either Text Data.Semantic) Data.ActiveNode
+		iso :: Optic.Iso' (Either Text Data.ImportantNode) Data.ActiveNode
 		iso = 
 			let
-				to_raw = Data.process_Node Right Left
-				from_raw = Base.either Data.MakeComment Data.MakeSemantic
+				to_raw = Data.process_ActiveNode Right Left
+				from_raw = Base.either Data.MakeComment Data.MakeImportant
 				in Optic.Iso to_raw from_raw
 		in Serial.whole (Serial.extend_with_iso iso raw)
 
@@ -149,8 +149,8 @@ serializer_meaningful_line_test =
 	Test.single "serializer_semantic_line" 
 		(
 			SerialTest.test_serializer serializer_semantic_line
-				[ Data.Semantic "food" Nothing
-				, Data.Semantic "food" (Just "apple")
+				[ Data.ImportantNode "food" Nothing
+				, Data.ImportantNode "food" (Just "apple")
 				]
 				[]
 		)
@@ -161,7 +161,7 @@ serializer_line_test =
 		(
 			SerialTest.test_serializer serializer_active
 				[ Data.MakeComment "comm"
-				, Data.MakeSemantic (Data.Semantic "apple" Nothing)
+				, Data.MakeImportant (Data.ImportantNode "apple" Nothing)
 				]
 				["/ "]
 		)
