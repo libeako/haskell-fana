@@ -166,7 +166,7 @@ library
         Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
         Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data
         Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Layer
-        Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Lines
+        Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.NodeSerial
         Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Test
         Fana.Serial.Bidir.Instances.WithStartPosition
         Fana.Serial.Bidir.Meta.Test.Main

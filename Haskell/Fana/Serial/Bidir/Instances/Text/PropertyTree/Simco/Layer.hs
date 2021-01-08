@@ -21,7 +21,7 @@ import qualified Fana.Math.Algebra.Monoid.Accumulate as Accu
 import qualified Fana.Optic.Concrete.Prelude as Optic
 import qualified Fana.Serial.Bidir.Instances.Text.Indent as Serial
 import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as SimcoDL
-import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Lines as Lines
+import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.NodeSerial as SimcoSerial
 import qualified Fana.Serial.Bidir.Parse as Serial
 import qualified Fana.Serial.Bidir.Serializer as Serial
 import qualified Fana.Serial.Print.Show as Fana
@@ -59,7 +59,7 @@ layer_text_tree :: Layer' Text [Base.Tree Text]
 layer_text_tree = Optic.piso_convert_error ErrorInHightListParsing Serial.text_tree
 
 layer_line :: Optic.PartialIso' [Serial.Error Char] Text SimcoDL.NodeWithActivity
-layer_line = Serial.to_partial_iso (Lines.serializer)
+layer_line = Serial.to_partial_iso (SimcoSerial.serializer)
 
 layer_identified_line :: Layer '(Text, (LineIdentifier, Text)) '(SimcoDL.NodeWithActivity, SimcoDL.NodeWithActivity)
 layer_identified_line = Optic.piso_convert_error (uncurry ErrorInLineParsing) (Optic.add_for_failure layer_line)
