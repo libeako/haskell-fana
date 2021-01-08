@@ -1,12 +1,11 @@
--- | Serialization of the separate document properties in simco language.
-module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Layer
+-- | Serialization of the Simco language (to | from) indented text.
+module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.IndentedTextSerial
 (
 	ParseError,
-	layer,
+	serializer,
 )
 where
 
-import Fana.Haskell.TypePair (Fst, Snd)
 import Fana.Math.Algebra.Category.OnTypePairs ((>**>))
 import Fana.Prelude
 import Prelude (Int, (+), Char, String)
@@ -20,8 +19,8 @@ import qualified Fana.Data.Tree.SerializeHight as TreeSerial
 import qualified Fana.Math.Algebra.Monoid.Accumulate as Accu
 import qualified Fana.Optic.Concrete.Prelude as Optic
 import qualified Fana.Serial.Bidir.Instances.Text.Indent as Serial
-import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as SimcoDL
-import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.NodeSerial as SimcoSerial
+import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as Data
+import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.NodeSerial as NodeSerial
 import qualified Fana.Serial.Bidir.Parse as Serial
 import qualified Fana.Serial.Bidir.Serializer as Serial
 import qualified Fana.Serial.Print.Show as Fana
@@ -33,9 +32,9 @@ type Text = String
 data LineIdentifier = LineIdentifier { line_ordinal :: Int, line_content :: Text }
 
 instance Fana.Showable Text LineIdentifier where
-	show l = 
+	show l =
 		mempty
-		<> "line " <> Show.from_Show (line_ordinal l) 
+		<> "line " <> Show.from_Show (line_ordinal l)
 		<> " [\"" <> Accu.single (line_content l) <> "\"]"
 
 data ParseError
@@ -52,20 +51,20 @@ instance Fana.Showable Text ParseError where
 			<> Base.fold (List.intersperse ", " (map Fana.show errors))
 			<> "]"
 
-type Layer l h = Optic.PartialIso ParseError (Fst l) (Snd l) (Fst h) (Snd h)
-type Layer' l h = Layer '(l, l) '(h, h)
+type Serializer l1 l2 h1 h2 = Optic.PartialIso ParseError l1 l2 h1 h2
+type Serializer' l h = Serializer l l h h
 
-layer_text_tree :: Layer' Text [Base.Tree Text]
-layer_text_tree = Optic.piso_convert_error ErrorInHightListParsing Serial.text_tree
+serializer_text_forest :: Serializer' Text [Base.Tree Text]
+serializer_text_forest = Optic.piso_convert_error ErrorInHightListParsing Serial.text_tree
 
-layer_line :: Optic.PartialIso' [Serial.Error Char] Text SimcoDL.NodeWithActivity
-layer_line = Serial.to_partial_iso (SimcoSerial.serializer)
+serializer_node :: Optic.PartialIso' [Serial.Error Char] Text Data.NodeWithActivity
+serializer_node = Serial.to_partial_iso (NodeSerial.serializer)
 
-layer_identified_line :: Layer '(Text, (LineIdentifier, Text)) '(SimcoDL.NodeWithActivity, SimcoDL.NodeWithActivity)
-layer_identified_line = Optic.piso_convert_error (uncurry ErrorInLineParsing) (Optic.add_for_failure layer_line)
+serializer_identified_line :: Serializer Text (LineIdentifier, Text) Data.NodeWithActivity Data.NodeWithActivity
+serializer_identified_line = Optic.piso_convert_error (uncurry ErrorInLineParsing) (Optic.add_for_failure serializer_node)
 
-layer_lines_general :: Traversable t => Layer '(t Text, t (LineIdentifier, Text)) '(t SimcoDL.NodeWithActivity, t SimcoDL.NodeWithActivity)
-layer_lines_general = Optic.lift_piso layer_identified_line
+serializer_lines_general :: Traversable t => Serializer (t Text) (t (LineIdentifier, Text)) (t Data.NodeWithActivity) (t Data.NodeWithActivity)
+serializer_lines_general = Optic.lift_piso serializer_identified_line
 
 identify_lines :: Traversable t => t Text -> t (LineIdentifier, Text)
 identify_lines = 
@@ -74,16 +73,15 @@ identify_lines =
 		accumulator count text = (count +1, ((LineIdentifier count text), text))
 		in Traversable.mapAccumL accumulator 1 >>> snd
 
-layer_lines :: 
-	Layer 
-		'(Text, Text)
-		'(Base.Compose [] Base.Tree Text, Base.Compose [] Base.Tree (LineIdentifier, Text))
-layer_lines = 
+serializer_lines :: 
+	Serializer 
+		Text Text
+		(Base.Compose [] Base.Tree Text) (Base.Compose [] Base.Tree (LineIdentifier, Text))
+serializer_lines = 
 	Optic.piso_convert_all id id (Base.Compose >>> identify_lines) Base.getCompose id
-	layer_text_tree
+	serializer_text_forest
 
-layer :: Layer' Text (Base.Forest SimcoDL.NodeWithActivity)
-layer = 
+serializer :: Serializer' Text (Base.Forest Data.NodeWithActivity)
+serializer = 
 	Optic.piso_convert_all id id Base.getCompose Base.Compose id
-	(layer_lines >**> layer_lines_general)
-
+	(serializer_lines >**> serializer_lines_general)
