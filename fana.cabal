@@ -1,10 +1,16 @@
 cabal-version: 3.0
 
-name:           fana
-version:        0.0.0.163
-synopsis:       some commonly useful stuff
-license-file:   _license_.txt
-build-type:     Simple
+name: fana
+version: 0.0.0.163
+synopsis: some commonly useful stuff
+category: Tools, Optics, Testing, Serialization
+license-file:  _license_.txt
+author: Zoltán Tóth, libeako.github.io
+maintainer: same as author
+build-type: Simple
+source-repository head
+  type: git
+  location: https://github.com/libeako/haskell-fana
 description:
 
     A library containing stuff useful generally in Haskell.
