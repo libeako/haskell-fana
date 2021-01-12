@@ -11,6 +11,7 @@ description:
     
     = Content
     
+    * Various tools to work better with the Haskell language. See "Fana.Haskell.AaaReadme".
     * Optics. See "Fana.Optic.AaaReadme".
     * A very simple but useful testing library. See "Fana.Develop.Test.Define".
     * Bidirectional serialization. See "Fana.Serial.Bidir.Serializer"
@@ -20,7 +21,7 @@ description:
     * Recursion schemes. Only basics. See "Fana.Data.Recurse".
     * Serialization of trees from list of elements with their hights.
     See "Fana.Data.Tree.ParseFromElemList".
-    * Various tools to work better with the Haskell language. See "Fana.Haskell.AaaReadme".
+    * The serialization library of the configuration language "Simco". See "Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.IndentedTextSerial".
     
     = Style
     
@@ -36,6 +37,10 @@ description:
     = Naming
     
     Import with qualification.
+    
+    = Others
+    
+    Ideally this library should several libraries, but i am want to save time from maintaing version bounds of many connected libraries.
 
 common common
     hs-source-dirs:

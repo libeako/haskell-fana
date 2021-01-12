@@ -1,8 +1,7 @@
 -- | Serialization of the Simco language (to | from) indented text.
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.IndentedTextSerial
 (
-	ParseError,
-	serializer,
+	ParseError, serializer,
 )
 where
 

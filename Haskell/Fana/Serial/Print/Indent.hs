@@ -1,3 +1,9 @@
+{-|
+	The contanet of this file helps in creating pritty output of tree structured text.
+	
+	The difference with "Fana.Serial.Bidir.Instances.Text.Indent" is that 
+	this one allows non-uniform indentation strings too but does not support parsing.
+-}
 module Fana.Serial.Print.Indent
 	(
 	Text, Indentation,
