@@ -1,16 +1,15 @@
 cabal-version: 3.0
 
 name: fana
-version: 0.0.0.163
-synopsis: some commonly useful stuff
+version: 0.0.0.164
+synopsis: Some commonly useful stuff
 category: Tools, Optics, Testing, Serialization
 license-file:  _license_.txt
-author: Zoltán Tóth, libeako.github.io
+license: CC0-1.0 AND 0BSD AND MIT-0
+author: Zoltán Tóth libeako.github.io
 maintainer: same as author
 build-type: Simple
-source-repository head
-  type: git
-  location: https://github.com/libeako/haskell-fana
+
 description:
 
     A library containing stuff useful generally in Haskell.
@@ -46,7 +45,11 @@ description:
     
     = Others
     
-    Ideally this library should several libraries, but i am want to save time from maintaing version bounds of many connected libraries.
+    Ideally this library should be several libraries, but i want to save time from maintaing version bounds of many connected libraries.
+
+source-repository head
+  type: git
+  location: https://github.com/libeako/haskell-fana
 
 common common
     hs-source-dirs:
@@ -73,12 +76,12 @@ common common
         -Wwrong-do-bind -Wunticked-promoted-constructors -Wunsupported-llvm-version
         -Worphans -Wsemigroup -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances
         -Wredundant-constraints -Wunused-imports -Wunused-foralls -Wmissing-signatures -Wcompat
-        -Wno-missing-home-modules -Werror -fshow-warning-groups
-        -O -fspecialise-aggressively -fexpose-all-unfoldings
+        -Wno-missing-home-modules -fshow-warning-groups
+        -fspecialise-aggressively -fexpose-all-unfoldings
     build-depends:
           adjunctions >=4.3 && <4.5
-        , base >=4.6 && <4.14
-        , constraints >=0.10 && <0.11
+        , base >=4.6 && <4.15
+        , constraints >=0.10 && <0.14
         , containers >=0.5 && <0.6
         , data-default-class >=0.1 && <0.2
         , distributive >=0.5 && <0.6
