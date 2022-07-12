@@ -69,13 +69,15 @@ transpose_to_naked = map fst &&& map snd
 
 
 instance Functor.Distributive HomoPair where
-	distribute in_functor =
-		map (Fn.unwrapDownFromForAll >>> flip map in_functor) all_keys
+	distribute functor =
+		let
+			at_key (Fn.DownFromForall index) = map index functor
+			in map at_key all_keys
 
 instance Functor.Representable HomoPair where
 	type Rep HomoPair = GetElemForall
 	tabulate = flip map all_keys
-	index = flip Fn.unwrapDownFromForAll
+	index representable (Fn.DownFromForall index) = index representable
 
 {-
 	TODO :

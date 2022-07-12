@@ -28,7 +28,7 @@ data Traversal p1 p2 w1 w2 = Traversal { unwrapTraversal :: TraversalNude p1 p2 
 	taking away from it its ability to perform effects.
 -}
 to_map :: TraversalNude p1 p2 w1 w2 -> ((p1 -> p2) -> (w1 -> w2))
-to_map = Profunctor.dimap (>>> Identity) (>>> runIdentity)
+to_map f = (>>> Identity) >>> f >>> (>>> runIdentity)
 
 instance Cat2.Category Traversal where
 	empty = Traversal id
@@ -45,7 +45,7 @@ class Profunctor.LoadablePS p => Wandering p where
 
 instance Wandering (->) where wander t = map Identity >>> unwrapTraversal t >>> map runIdentity
 instance Applicative f => Wandering (FunUpIo.UpO f) where
-	wander = unwrapTraversal >>> Concrete.fn_up FunUpIo.iso_UpO
+	wander (Traversal trav) = Concrete.fn_up FunUpIo.iso_UpO trav
 
 map_w_in_Traversal ::
 	(forall f . Applicative f => (w1i -> f w2i) -> (w1o -> f w2o)) ->
@@ -70,4 +70,4 @@ instance Wandering (Traversal p1 p2) where
 instance OpticP.Adapted Traversal where
 	type ProfunctorConstraint Traversal = Wandering
 	proof_of_constraint_implementation = Constraint.Dict
-	from_adapted = wander
+	from_adapted x = wander x

@@ -1,7 +1,7 @@
 cabal-version: 3.0
 
 name: fana
-version: 0.0.0.164
+version: 0.0.0.165
 synopsis: Some commonly useful stuff
 category: Tools, Optics, Testing, Serialization
 license-file:  _license_.txt
@@ -80,7 +80,7 @@ common common
         -fspecialise-aggressively -fexpose-all-unfoldings
     build-depends:
           adjunctions >=4.3 && <4.5
-        , base >=4.6 && <4.15
+        , base >=4.12 && <4.16
         , constraints >=0.10 && <0.14
         , containers >=0.5 && <0.6
         , data-default-class >=0.1 && <0.2

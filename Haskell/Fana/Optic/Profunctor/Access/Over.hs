@@ -17,7 +17,7 @@ over :: OpticBone (->) p1 p2 w1 w2 -> (p1 -> p2) -> (w1 -> w2)
 over o = o
 
 traverse :: Applicative f => Traversal p1 p2 w1 w2 -> (p1 -> f p2) -> (w1 -> f w2)
-traverse = Concrete.fn_down FunUpIo.iso_UpO
+traverse x = Concrete.fn_down FunUpIo.iso_UpO x
 
 fold :: Monoid m => Traversal m m' w w' -> (w -> m)
 fold o = (traverse o Const) >>> getConst
