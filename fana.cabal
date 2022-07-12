@@ -30,7 +30,7 @@ description:
     
     = Style
     
-    Primerily simple.
+    Primarily simple.
     
     I sacrificed run-time efficiency for simplicity at several places. But not asymptotically.
     For example i rather go over a collection twice than
