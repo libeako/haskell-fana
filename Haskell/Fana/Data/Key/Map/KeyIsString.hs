@@ -38,8 +38,9 @@ type Elem c e = ([c], e)
 	* 'c' is the type of character in the key string.
 	* 'e' is the type of elements of the container.
 -}
-data Map c e = Joint { immediate_value :: Maybe e, children :: Base.Map c (Map c e) }
-	deriving (Functor, Foldable, Traversable)
+data Map c e = 
+	Joint { immediate_value :: Maybe e, children :: Base.Map c (Map c e) }
+	deriving (Eq, Functor, Foldable, Traversable)
 
 
 -- | Lens to the immediate_value of a Map.
