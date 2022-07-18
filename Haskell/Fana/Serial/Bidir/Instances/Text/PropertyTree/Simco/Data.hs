@@ -3,8 +3,9 @@ module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data
 (
 	Activity (..), CommentValue,
 	ImportantNode (..), ActiveNode (..), NodeWithActivity (..),
+	Tree, Forest,
 	process_ActiveNode,
-	make_atom,
+	make_atom, make_tree,
 	clean,
 )
 where
@@ -30,18 +31,19 @@ process_ActiveNode on_meaningful on_comment =
 		MakeImportant d -> on_meaningful d
 		MakeComment d -> on_comment d
 type NodeWithActivity = (Activity, ActiveNode)
-
+type Tree = Base.Tree NodeWithActivity
+type Forest = Base.Forest NodeWithActivity
 
 -- * Helper constructors
 
 -- ~ make_comment :: CommentValue -> _
 -- ~ make_comment = _
 
-make_atom :: String -> String -> ActiveNode
-make_atom name' value' = MakeImportant (ImportantNode name' (Just value'))
+make_atom :: String -> String -> Tree
+make_atom name' value' = Base.Node (Active, (MakeImportant (ImportantNode name' (Just value')))) []
 
--- ~ make_composite :: PropertyName -> Forest -> _
--- ~ make_composite name' children = _
+make_tree :: PropertyName -> Forest -> Tree
+make_tree name' children = Base.Node (Active, MakeImportant (ImportantNode name' Nothing)) children
 
 
 
