@@ -1,6 +1,6 @@
 module Fana.Math.Algebra.Monoid.Accumulate
 (
-	Accumulated,
+	Accumulated (Accumulated),
 	single, extract,
 )
 where
