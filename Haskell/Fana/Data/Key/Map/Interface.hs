@@ -44,14 +44,14 @@ class
 
 		In case of key collision : the output is a key at which collision is.
 	-}
-	from_list_of_uniques :: forall e . Ord (Key t) => [(Key t, e)] -> Either (Key t) (t e)
+	from_list_of_uniques :: forall e . Ord (Key t) => [(Key t, e)] -> Either (Key t, [e]) (t e)
 	from_list_of_uniques =
 		let
-			elem_singlifier :: Key t -> [e] -> Either (Key t) e
+			elem_singlifier :: Key t -> [e] -> Either (Key t, [e]) e
 			elem_singlifier key =
 				\ case
 					[e] -> Right e
-					_ -> Left key
+					multi -> Left (key, multi)
 			in from_list_lists >>> traverse_with_key elem_singlifier
 
 
