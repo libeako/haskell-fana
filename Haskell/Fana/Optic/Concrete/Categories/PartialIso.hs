@@ -3,7 +3,8 @@ module Fana.Optic.Concrete.Categories.PartialIso
 (
 	PartialIso (..), PartialIso',
 	lift_piso, add_for_failure,
-	piso_convert_all, piso_convert_error, piso_convert_error_with_input,
+	piso_convert_all, piso_convert_error, 
+	piso_convert_error_with_low, piso_add_verification,
 	test_piso,
 )
 where
@@ -63,9 +64,9 @@ instance HasDescribingClass4 (PartialIso e) where
 piso_convert_error :: (e1 -> e2) -> PartialIso e1 l1 l2 h1 h2 -> PartialIso e2 l1 l2 h1 h2
 piso_convert_error t x = x { piso_interpret = piso_interpret x >>> Bifunctor.first t }
 
-piso_convert_error_with_input ::
+piso_convert_error_with_low ::
 	forall e1 e2 l1 l2 h1 h2 . (l2 -> e1 -> e2) -> PartialIso e1 l1 l2 h1 h2 -> PartialIso e2 l1 l2 h1 h2
-piso_convert_error_with_input t m =
+piso_convert_error_with_low t m =
 	let
 		old_interpret = piso_interpret m
 		new_interpret :: l2 -> Either e2 h2
@@ -82,6 +83,22 @@ piso_convert_all ::
 	PartialIso e2 l12 l22 h12 h22
 piso_convert_all e lr hp hr lp (PartialIso r p) =
 	PartialIso (hr >>> r >>> lr) (lp >>> p >>> Bifunctor.bimap e hp)
+
+piso_add_verification ::
+	forall e l1 l2 h1 h2 . (h2 -> Maybe e) -> PartialIso e l1 l2 h1 h2 -> PartialIso e l1 l2 h1 h2
+piso_add_verification get_error m =
+	let
+		old_interpret = piso_interpret m
+		addition :: Either e h2 -> Either e h2
+		addition =
+			\case
+				Left e -> Left e
+				Right h ->
+					case get_error h of
+						Nothing -> Right h
+						Just e -> Left e
+		in m { piso_interpret = old_interpret >>> addition }
+
 
 -- | Lifts the given PartialIso to work on a container of elements.
 lift_piso :: Traversable t => PartialIso e l1 l2 h1 h2 -> PartialIso e (t l1) (t l2) (t h1) (t h2)
