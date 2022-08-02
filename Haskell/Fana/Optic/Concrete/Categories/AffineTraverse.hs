@@ -1,6 +1,6 @@
 module Fana.Optic.Concrete.Categories.AffineTraverse
 (
-	AffineTraversal, AffineTraversal',
+	AffineTraversal (..), AffineTraversal',
 )
 where
 

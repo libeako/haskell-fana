@@ -101,7 +101,7 @@ piso_add_verification get_error m =
 
 
 -- | Lifts the given PartialIso to work on a container of elements.
-lift_piso :: Traversable t => PartialIso e l1 l2 h1 h2 -> PartialIso e (t l1) (t l2) (t h1) (t h2)
+lift_piso :: (Functor tr, Traversable tp) => PartialIso e l1 l2 h1 h2 -> PartialIso e (tr l1) (tp l2) (tr h1) (tp h2)
 lift_piso (PartialIso d i) = PartialIso (map d) (map i >>> Traversable.sequenceA)
 
 {-|
