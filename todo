@@ -1,6 +1,5 @@
 Optic
 	Iso
-		delete 'iso_up'
 		rename 'in_iso_up' to "ofIso_up"
 			similarly for 'in_iso_down'
 	Iso, PartialIso

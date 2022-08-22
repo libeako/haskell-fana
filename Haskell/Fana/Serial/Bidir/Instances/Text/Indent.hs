@@ -37,7 +37,7 @@ line_with_indent :: Optic.Iso' String LineWithIndent
 line_with_indent = Optic.Iso line_with_indent_render line_with_indent_parse
 
 lines_with_indent :: Optic.Iso' String [LineWithIndent]
-lines_with_indent = Serial.lines >**> Optic.iso_up line_with_indent
+lines_with_indent = Serial.lines >**> Optic.lift_iso line_with_indent
 
 
 type TextTreeSerializer l h = Optic.PartialIso (TreeSerial.HightListParseError String) l l h h
