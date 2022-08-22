@@ -5,6 +5,7 @@ module Fana.Optic.Concrete.Categories.Iso
 	fn_down,
 	change_iso_per_component,
 	iso_up,
+	lift_iso,
 	-- * Some Instances
 	iso_with_nothing_before,
 	iso_pair_swap, iso_Either_swap,
@@ -56,6 +57,8 @@ change_iso_per_component change_down change_up (Iso d u) = Iso (change_down d) (
 iso_up :: Functor f => Iso l1 l2 h1 h2 -> Iso (f l1) (f l2) (f h1) (f h2)
 iso_up = change_iso_per_component map map
 
+lift_iso :: (Functor f1, Functor f2) => Iso l1 l2 h1 h2 -> Iso (f1 l1) (f2 l2) (f1 h1) (f2 h2)
+lift_iso = change_iso_per_component map map
 
 instance Cat2.Category Iso where
 	empty = Iso id id

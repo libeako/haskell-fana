@@ -1,4 +1,5 @@
 Optic
+	delete 'iso_up'
 	Iso, PartialIso
 		They should be just products of composable arrows, augmented with a proof of [partial] isomorphism.
 Simco
