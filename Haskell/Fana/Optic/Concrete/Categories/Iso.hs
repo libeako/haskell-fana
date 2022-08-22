@@ -1,6 +1,6 @@
 module Fana.Optic.Concrete.Categories.Iso
 (
-	Iso (Iso), Iso',
+	Iso (..), Iso',
 	reverse,
 	fn_down,
 	change_iso_per_component,
