@@ -33,8 +33,8 @@ import qualified Fana.Optic.Profunctor.Interface as Proptic
 -- | Isomorphism
 data Iso l1 l2 h1 h2 = Iso
 	{
-	in_iso_down :: h1 -> l1,
-	in_iso_up :: l2 -> h2
+	ofIso_down :: h1 -> l1,
+	ofIso_up :: l2 -> h2
 	}
 type Iso' l h = Common.Simple Iso l h
 
@@ -42,7 +42,7 @@ reverse :: Iso l1 l2 h1 h2 -> Iso h2 h1 l2 l1
 reverse (Iso d u) = Iso u d
 
 fn_down :: Iso l1 l2 h1 h2 -> (h2 -> h1) -> (l2 -> l1)
-fn_down iso hf = in_iso_up iso >>> hf >>> in_iso_down iso
+fn_down iso hf = ofIso_up iso >>> hf >>> ofIso_down iso
 
 
 -- | Changes an isomorphism by changing its components independently
@@ -66,19 +66,19 @@ instance HasDescribingClass4 Iso where
 
 
 instance IsFold Iso where
-	to_list = in_iso_down >>> (>>> pure)
-	map_fold o f = in_iso_down o >>> f
-	fold_l o c r = in_iso_down o >>> c r
-	fold_r o c r = in_iso_down o >>> flip c r
-instance IsDown Iso where down = in_iso_down
-instance IsInterpret e Iso where interpret = in_iso_up >>> map Right
-instance IsUp Iso where up = in_iso_up
-instance IsFnUp Iso where fn_up o ee = in_iso_down o >>> ee >>> in_iso_up o
-instance IsTraversal Iso where traverse o eae = in_iso_down o >>> eae >>> map (in_iso_up o)
+	to_list = ofIso_down >>> (>>> pure)
+	map_fold o f = ofIso_down o >>> f
+	fold_l o c r = ofIso_down o >>> c r
+	fold_r o c r = ofIso_down o >>> flip c r
+instance IsDown Iso where down = ofIso_down
+instance IsInterpret e Iso where interpret = ofIso_up >>> map Right
+instance IsUp Iso where up = ofIso_up
+instance IsFnUp Iso where fn_up o ee = ofIso_down o >>> ee >>> ofIso_up o
+instance IsTraversal Iso where traverse o eae = ofIso_down o >>> eae >>> map (ofIso_up o)
 instance IsAffineTraversal Iso where
 	match_and_replace (Iso d u) = liftA2 (,) (d >>> Right) (const u)
-	match iso = in_iso_down iso >>> Right
-	replace iso = const (in_iso_up iso)
+	match iso = ofIso_down iso >>> Right
+	replace iso = const (ofIso_up iso)
 instance IsLens Iso where
 	down_and_replace (Iso d u) = \ c -> (d c, u)
 instance IsPrism Iso where
@@ -107,7 +107,7 @@ iso_of_wrapping = Iso Wrap.unwrap Wrap.wrap
 instance Proptic.Adapted Iso where
 	type ProfunctorConstraint Iso = Profunctor
 	proof_of_constraint_implementation = Constraint.Dict
-	from_adapted c = dimap (in_iso_down c) (in_iso_up c)
+	from_adapted c = dimap (ofIso_down c) (ofIso_up c)
 
 
 

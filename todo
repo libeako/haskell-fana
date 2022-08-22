@@ -1,7 +1,4 @@
 Optic
-	Iso
-		rename 'in_iso_up' to "ofIso_up"
-			similarly for 'in_iso_down'
 	Iso, PartialIso
 		They should be just products of composable arrows, augmented with a proof of [partial] isomorphism.
 Simco
