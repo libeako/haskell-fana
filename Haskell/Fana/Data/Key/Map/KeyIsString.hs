@@ -88,7 +88,7 @@ instance Ord c => HasLensToMaybeElement (Map c) where
 					maybeize :: Optic.Lens' (Map c e) (Maybe (Map c e))
 					maybeize = Optic.lens_from_get_set (Maybe.fromMaybe empty_coll) (optimize >>> const)
 					in
-						Category2.empty
+						Category2.identity
 						>**>^ lens_at rest
 						>**>^ maybeize
 						>**>^ lens_at c

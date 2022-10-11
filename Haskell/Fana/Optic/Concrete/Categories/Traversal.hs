@@ -28,7 +28,7 @@ newtype Traversal l1 l2 h1 h2 = Traversal
 type Traversal' l h = Common.Simple Traversal l h
 
 instance Cat2.Category Traversal where
-	empty = Traversal id
+	identity = Traversal id
 	compose (Traversal tr1) (Traversal tr2) = Traversal (tr1 >>> tr2)
 
 instance HasDescribingClass4 Traversal where

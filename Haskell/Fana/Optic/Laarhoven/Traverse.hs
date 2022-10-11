@@ -31,7 +31,7 @@ to_map :: TraversalNude p1 p2 w1 w2 -> ((p1 -> p2) -> (w1 -> w2))
 to_map f = (>>> Identity) >>> f >>> (>>> runIdentity)
 
 instance Cat2.Category Traversal where
-	empty = Traversal id
+	identity = Traversal id
 	compose ::
 		Traversal p1 p2 q1 q2 ->
 		Traversal q1 q2 r1 r2 ->

@@ -22,7 +22,7 @@ instance Wrap.Wrap (Up l1 l2 h1 h2) where
 	type Unwrap (Up l1 l2 h1 h2) = l2 -> h2
 
 instance Cat2.Category Up where
-	empty = Up id
+	identity = Up id
 	compose = Wrap.over_2 (>>>)
 
 instance HasDescribingClass4 Up where

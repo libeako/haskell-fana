@@ -53,7 +53,7 @@ instance IsInterpret e (PartialIso e) where interpret = piso_interpret
 instance IsPartialIso e (PartialIso e) where
 
 instance Category2.Category (PartialIso e) where
-	empty = PartialIso id (id >>> Right)
+	identity = PartialIso id (id >>> Right)
 	compose x1 x2 = PartialIso (down x2 >>> down x1) (interpret x2 <=< interpret x1)
 
 instance HasDescribingClass4 (PartialIso e) where

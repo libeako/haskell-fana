@@ -94,7 +94,7 @@ move_load_inward_l ((l1, f), l) = (l1, f >>> HePair.before l)
 
 
 instance Cat2.Category Lens where
-	empty = Lens (id &&& const id)
+	identity = Lens (id &&& const id)
 	compose (Lens l12) (Lens l23) =
 		let
 			naked l3t1 =

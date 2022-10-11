@@ -40,7 +40,7 @@ serialization_test =
 					]
 		asserted =
 			Optic.test_piso
-				(Category2.empty, Category2.empty)
+				(Category2.identity, Category2.identity)
 				invalid_pictures datas
 					(serializer :: Optic.PartialIso' (HightListParseError ()) [(Hight, ())] [Tree ()])
 		in Test.single "tree from elem list" asserted

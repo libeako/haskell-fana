@@ -26,7 +26,7 @@ class Cat2.Category o => Adapted (o :: Type -> Type -> Type -> Type -> Type) whe
 			-- the concrete optic transformer :
 			c :: o p1 p2 p1 p2 -> o p1 p2 w1 w2
 			c = Constraint.withDict dict a
-		in c Cat2.empty
+		in c Cat2.identity
 
 
 -- | the following converter functions wrap type inference problem

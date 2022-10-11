@@ -38,7 +38,7 @@ output_strictly :: c -> (Either c y, x -> c)
 output_strictly c = (Left c, const c)
 
 instance Cat2.Category AffineTraversal where
-	empty = AffineTraversal (Right &&& (const id))
+	identity = AffineTraversal (Right &&& (const id))
 	compose ::
 		forall p1 p2 q1 q2 r1 r2 .
 		AffineTraversal p1 p2 q1 q2 ->

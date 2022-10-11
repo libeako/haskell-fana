@@ -38,7 +38,7 @@ continue_match :: Prism l1 l2 h1 h2 -> r -> (l1 -> r) -> h1 -> r
 continue_match p r f = p_match p >>> either (const r) f
 
 instance Cat2.Category Prism where
-	empty = Prism Right id
+	identity = Prism Right id
 	compose :: forall p1 p2 q1 q2 r1 r2 . Prism p1 p2 q1 q2 -> Prism q1 q2 r1 r2 -> Prism p1 p2 r1 r2
 	compose pq qr =
 		let

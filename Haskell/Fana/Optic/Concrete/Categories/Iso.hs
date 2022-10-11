@@ -60,7 +60,7 @@ lift_iso_by_function :: ((l -> l) -> (h -> h)) -> Iso' l l -> Iso' h h
 lift_iso_by_function f (Iso d u) = Iso (f d) (f u)
 
 instance Cat2.Category Iso where
-	empty = Iso id id
+	identity = Iso id id
 	compose (Iso d12 u12) (Iso d23 u23) = Iso (d23 >>> d12) (u12 >>> u23)
 
 instance HasDescribingClass4 Iso where

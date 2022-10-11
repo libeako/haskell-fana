@@ -37,5 +37,5 @@ newtype Divorce2TypePairInputs f t11 t12 t21 t22 =
 -- instances
 
 instance Cat2.Category c => Base.Category (Unite2TypePairInputs c) where
-	id = Unite2TypePairInputs (Cat2.empty)
+	id = Unite2TypePairInputs (Cat2.identity)
 	(Unite2TypePairInputs x) . (Unite2TypePairInputs y) = Unite2TypePairInputs (Cat2.compose y x)

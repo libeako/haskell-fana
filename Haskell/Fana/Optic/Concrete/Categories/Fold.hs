@@ -31,7 +31,7 @@ instance Wrap.Wrap (Fold l1 l2 h1 h2) where
 	type Unwrap (Fold l1 l2 h1 h2) = h1 -> [l1]
 
 instance Cat2.Category Fold where
-	empty = Fold pure
+	identity = Fold pure
 	compose = Wrap.over_2 (<=<)
 
 instance HasDescribingClass4 Fold where

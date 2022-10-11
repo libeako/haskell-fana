@@ -25,7 +25,7 @@ instance Wrap.Wrap (FnUp l1 l2 h1 h2) where
 
 
 instance Cat2.Category FnUp where
-	empty = FnUp id
+	identity = FnUp id
 	compose = Wrap.over_2 (>>>)
 
 instance HasDescribingClass4 FnUp where
