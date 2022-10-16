@@ -75,7 +75,7 @@ common common
         -Wname-shadowing -Wincomplete-record-updates -Woverflowed-literals -Wmonomorphism-restriction
         -Wwrong-do-bind -Wunticked-promoted-constructors -Wunsupported-llvm-version
         -Worphans -Wsemigroup -Wnoncanonical-monoid-instances -Wnoncanonical-monad-instances
-        -Wredundant-constraints -Wunused-imports -Wunused-foralls -Wmissing-signatures -Wcompat
+        -Wredundant-constraints -Wunused-imports -Wunused-packages -Wmissing-signatures -Wcompat
         -Wno-missing-home-modules -fshow-warning-groups
         -fspecialise-aggressively -fexpose-all-unfoldings
     build-depends:
