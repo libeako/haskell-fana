@@ -2,6 +2,7 @@
 module Fana.Data.Tree.OfBase
 (
 	Hight,
+	trunk_in_tree, children_in_tree,
 	filter_shallowly, filter_deeply,
 	with_hight,
 	with_path_to_trunk,
@@ -16,10 +17,17 @@ import Prelude ((+))
 import qualified Prelude as Base
 import qualified Data.List as List
 import qualified Data.Maybe as Base
+import qualified Fana.Optic.Concrete.Categories.Lens as Optic
 
 
 type Hight = Base.Int
 
+
+trunk_in_tree :: Optic.Lens' e (Tree e)
+trunk_in_tree = Optic.lens_from_get_set rootLabel (\ e t -> Node e (subForest t))
+
+children_in_tree :: Optic.Lens' (Forest e) (Tree e)
+children_in_tree = Optic.lens_from_get_set subForest (\ ch t -> Node (rootLabel t) ch)
 
 -- | Drops Nothing nodes. But not their descendants.
 filter_shallowly :: Tree (Maybe e) -> Forest e
@@ -38,6 +46,7 @@ filter_deeply input =
 		Just elem ->
 			let new_children = Base.catMaybes (List.map filter_deeply (subForest input))
 				in Just (Node { rootLabel = elem, subForest = new_children })
+
 
 with_path_to_trunk' :: [Tree e] -> Tree e -> Tree ([Tree e], e)
 with_path_to_trunk' path tree =
