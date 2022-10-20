@@ -23,7 +23,7 @@ import qualified Fana.Optic.Concrete.Categories.Fold as Fold
 
 newtype Traversal l1 l2 h1 h2 = Traversal
 	{
-	unwrapTraversal :: forall a . Applicative a => (l1 -> a (l2)) -> (h1 -> a (h2))
+	unwrapTraversal :: forall a . Applicative a => (l1 -> a l2) -> (h1 -> a h2)
 	}
 type Traversal' l h = Common.Simple Traversal l h
 

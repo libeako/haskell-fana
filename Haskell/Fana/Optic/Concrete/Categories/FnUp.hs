@@ -2,6 +2,7 @@
 module Fana.Optic.Concrete.Categories.FnUp
 (
 	FnUp (..), FnUp',
+	sequence_fn_up,
 )
 where
 
@@ -43,3 +44,9 @@ instance Profunctor (FnUp p1 p2) where dimap f1 f2 = Wrap.over (map (dimap f1 f2
 instance Profunctor.LoadableP (FnUp i1 i2) where load_pe = Wrap.over (map Profunctor.load_pe)
 instance Profunctor.LoadableS (FnUp i1 i2) where load_se = Wrap.over (map Profunctor.load_se)
 instance Profunctor.LoadablePS (FnUp i1 i2) where
+
+
+sequence_fn_up ::
+	forall l h .
+	FnUp' l h -> FnUp' l h -> FnUp' l h
+sequence_fn_up (FnUp t1) (FnUp t2) = FnUp (\ f -> t1 f >>> t2 f)
