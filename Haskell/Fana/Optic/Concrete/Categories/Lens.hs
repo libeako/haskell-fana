@@ -8,6 +8,9 @@ module Fana.Optic.Concrete.Categories.Lens
 	-- * Else
 	lens_output_from_set_to_lift,
 	lens_output_from_lift_to_set,
+
+	lift_functory_function,
+	
 	-- * Some Instances
 	lens_1, lens_2,
 )
@@ -154,6 +157,13 @@ instance Sumable Lens where
 				(l1 >>> (map >>> map) Left)
 				(l2 >>> (map >>> map) Right)
 			in Lens lens
+
+
+lift_functory_function :: Functor f => Lens l1 l2 h1 h2 -> (l1 -> f l2) -> (h1 -> f h2)
+lift_functory_function (Lens lens) l h1 =
+	let
+		(l1, lh) = lens h1
+		in map lh (l l1)
 
 
 -------------------------------------- some instances : ----------------------------------------------
