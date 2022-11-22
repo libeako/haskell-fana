@@ -2,8 +2,8 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
 (
 	PropertyName, AtomicPropertyValue,
-	PropertyListStructure, PropertyStructure (..),
-	PropertyList, Property, NamedProperty,
+	PropertyS, PropertyValueS (..),
+	NamedProperty, PropertyList, Property,
 )
 where
 
@@ -12,8 +12,12 @@ import Prelude (String)
 
 type PropertyName = String
 type AtomicPropertyValue = String
-type NamedProperty e = (PropertyName, PropertyStructure e)
-type PropertyListStructure e = [NamedProperty e]
-data PropertyStructure e = MakeAtomicProperty e | MakeCompositeProperty (PropertyListStructure e)
-type PropertyList = PropertyListStructure AtomicPropertyValue
-type Property = PropertyStructure AtomicPropertyValue
+
+{- "S" in the following names stands for "structure" -}
+
+type PropertyS e = (PropertyName, PropertyValueS e)
+data PropertyValueS e = PropertyValueAtomic e | PropertyValueComposite [PropertyS e]
+
+type NamedProperty = PropertyS AtomicPropertyValue
+type PropertyList = [PropertyS AtomicPropertyValue]
+type Property = PropertyValueS AtomicPropertyValue

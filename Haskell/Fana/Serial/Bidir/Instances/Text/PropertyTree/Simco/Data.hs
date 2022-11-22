@@ -70,11 +70,11 @@ drop_comment = filter_forest (\ case { MakeImportant s -> Just s; _ -> Nothing }
 forest_to_prop_list :: Base.Forest ImportantNode -> PropertyList
 forest_to_prop_list = map tree_to_prop >>> Filter.filter
 
-tree_to_prop :: Base.Tree ImportantNode -> Maybe (NamedProperty String)
+tree_to_prop :: Base.Tree ImportantNode -> Maybe NamedProperty
 tree_to_prop (Base.Node (ImportantNode n value') subtrees) = 
 	case forest_to_prop_list subtrees of
-		[] -> map (MakeAtomicProperty >>> Pair.after n) value'
-		s -> Just (n, MakeCompositeProperty s)
+		[] -> map (PropertyValueAtomic >>> Pair.after n) value'
+		s -> Just (n, PropertyValueComposite s)
 
 
 clean :: Base.Forest NodeWithActivity -> PropertyList
