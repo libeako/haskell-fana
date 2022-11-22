@@ -1,5 +1,8 @@
 Optic
 	Iso, PartialIso
 		They should be just products of composable arrows, augmented with a proof of [partial] isomorphism.
+	meta optics [optics on optics]
+		someinterface  members can be replaced by them
+			example: piso_convert_error
 Simco
 	The isomorphisms that drop activities and comments are not really isomorphisms. It is a lie. The code should better express the reality.
