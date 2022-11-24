@@ -3,7 +3,7 @@ module Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
 (
 	PropertyName, AtomicPropertyValue,
 	PropertyS, PropertyValueS (..),
-	NamedProperty, PropertyList, Property,
+	Property, PropertyList, PropertyValue,
 )
 where
 
@@ -18,6 +18,6 @@ type AtomicPropertyValue = String
 type PropertyS e = (PropertyName, PropertyValueS e)
 data PropertyValueS e = PropertyValueAtomic e | PropertyValueComposite [PropertyS e]
 
-type NamedProperty = PropertyS AtomicPropertyValue
+type Property = PropertyS AtomicPropertyValue
 type PropertyList = [PropertyS AtomicPropertyValue]
-type Property = PropertyValueS AtomicPropertyValue
+type PropertyValue = PropertyValueS AtomicPropertyValue
