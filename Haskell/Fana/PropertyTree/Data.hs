@@ -1,5 +1,5 @@
 -- | Data structure representing tree of properties.
-module Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
+module Fana.PropertyTree.Data
 (
 	PropertyName, AtomicPropertyValue,
 	PropertyS, PropertyValueS (..),

@@ -23,7 +23,6 @@ import qualified Fana.Serial.Bidir.Instances.Maybe as Serial
 import qualified Fana.Serial.Bidir.Instances.Multiple as Serial
 import qualified Fana.Serial.Bidir.Instances.ProductSum as Serial
 import qualified Fana.Serial.Bidir.Instances.Tag as Serial
-import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Test as TestSimco
 
 
 test_nothing :: Test
@@ -153,6 +152,5 @@ test =
 			, test_enum
 			, test_whole
 			, test_text
-			, TestSimco.test
 			]
 		in Test.bunch "combine" simple_tests

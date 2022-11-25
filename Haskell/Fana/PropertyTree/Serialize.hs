@@ -1,4 +1,4 @@
-module Fana.Serial.Bidir.Instances.Text.PropertyTree.Serialize
+module Fana.PropertyTree.Serialize
 (
 	ParseError, 
 	Serializer, 
@@ -12,7 +12,7 @@ import Data.Default.Class
 import Data.Maybe (fromMaybe)
 import Data.Monoid (appEndo)
 import Fana.Prelude
-import Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
+import Fana.PropertyTree.Data
 import Prelude (Char, String)
 
 import qualified Data.Monoid as Monoid

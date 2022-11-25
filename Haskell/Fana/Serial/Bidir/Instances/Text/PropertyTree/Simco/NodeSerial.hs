@@ -1,19 +1,16 @@
 module Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.NodeSerial
 (
 	serializer,
-	test,
 )
 where
 
 import Fana.Prelude
-import Fana.Develop.Test.Define (Test)
 import Prelude (Char, String)
 
 import qualified Data.Char as Char
 import qualified Data.Either as Base
 import qualified Data.Maybe as Base
 import qualified Fana.Convert as Fana
-import qualified Fana.Develop.Test.Define as Test
 import qualified Fana.Optic.Concrete.Categories.Iso as Optic
 import qualified Fana.Serial.Bidir.Instances.Basic as Serial
 import qualified Fana.Serial.Bidir.Instances.Concrete as Serial
@@ -23,7 +20,6 @@ import qualified Fana.Serial.Bidir.Instances.Multiple as Serial
 import qualified Fana.Serial.Bidir.Instances.ProductSum as Serial
 import qualified Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data as Data
 import qualified Fana.Serial.Bidir.Serializer as Serial
-import qualified Fana.Serial.Bidir.Test as SerialTest
 import qualified Fana.Serial.Print.Show as Fana
 
 
@@ -94,7 +90,7 @@ serializer_active =
 				in Optic.Iso to_raw from_raw
 		in Serial.whole (Serial.extend_with_iso iso raw)
 
--- | Serialzier of the inactivity symbol.
+-- | Serializer of the inactivity symbol.
 serializer_inactivity_symbol :: Fana.ExistsConversion p Char => Serializer p ()
 serializer_inactivity_symbol = Serial.concrete_string "\\ "
 
@@ -118,62 +114,3 @@ serializer =
 		raw :: Serializer p (Data.Activity,  Data.ActiveNode)
 		raw = Serial.product (serializer_activity, serializer_active)
 		in Serial.whole raw
-
-
-
--------------------------- TESTS ----------------------------------
-
-serializer_name_test :: Test
-serializer_name_test = 
-	Test.single "serializer_name" (SerialTest.test_serializer serializer_name ["barbara", "jane-doe"] [])
-
-serializer_value_test :: Test
-serializer_value_test = 
-	Test.single "serializer_value" (SerialTest.test_serializer serializer_value ["", "ah", "\" \""] [])
-
-serializer_assignment_test :: Test
-serializer_assignment_test = 
-	Test.single "serializer_assignment" 
-		(SerialTest.test_serializer serializer_assignment ["4", "ah"] ["=fld", " =kdjh", "= jfh"])
-
-serializer_important_test :: Test
-serializer_important_test = 
-	Test.single "serializer_important" 
-		(
-			SerialTest.test_serializer serializer_important
-				[ Data.ImportantNode "food" Nothing
-				, Data.ImportantNode "food" (Just "apple")
-				]
-				[]
-		)
-
-serializer_inactivity_symbol_test :: Test
-serializer_inactivity_symbol_test = 
-	Test.single "serializer_inactive"  (SerialTest.test_serializer serializer_inactivity_symbol [()] ["\\"])
-
-serializer_activity_test :: Test
-serializer_activity_test = 
-	Test.single "serializer_activity"  (SerialTest.test_serializer serializer_activity [Data.Active, Data.InActive] [])
-
-serializer_test :: Test
-serializer_test = 
-	Test.single "serializer_line"
-		(
-			SerialTest.test_serializer serializer_active
-				[ Data.MakeComment "comm"
-				, Data.MakeImportant (Data.ImportantNode "apple" Nothing)
-				]
-				["/ "]
-		)
-
-test :: Test.Test
-test = 
-	let 
-		simple_tests :: [Test]
-		simple_tests = 
-			[ serializer_inactivity_symbol_test, serializer_activity_test
-			, serializer_name_test, serializer_value_test, serializer_assignment_test
-			, serializer_important_test
-			, serializer_test
-			]
-		in Test.bunch "node" simple_tests

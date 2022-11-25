@@ -1,7 +1,7 @@
 cabal-version: 3.0
 
 name: fana
-version: 0.0.0.186
+version: 0.0.0.187
 synopsis: Some commonly useful stuff
 category: Tools, Optics, Testing, Serialization
 license-file:  _license_.txt
@@ -166,6 +166,8 @@ library
         Fana.Prelude
         Fana.Prelude.FromBase
         Fana.Prelude.FromElse
+        Fana.PropertyTree.Data
+        Fana.PropertyTree.Serialize
         Fana.Serial.Bidir.Instances.Basic
         Fana.Serial.Bidir.Instances.Conditioned
         Fana.Serial.Bidir.Instances.Concrete
@@ -178,12 +180,10 @@ library
         Fana.Serial.Bidir.Instances.Tag
         Fana.Serial.Bidir.Instances.Text.Indent
         Fana.Serial.Bidir.Instances.Text.Lines
-        Fana.Serial.Bidir.Instances.Text.PropertyTree.Data
-        Fana.Serial.Bidir.Instances.Text.PropertyTree.Serialize
         Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Data
-        Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.IndentedTextSerial
+        Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.AsAbstract
+        Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.AsText
         Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.NodeSerial
-        Fana.Serial.Bidir.Instances.Text.PropertyTree.Simco.Test
         Fana.Serial.Bidir.Instances.WithStartPosition
         Fana.Serial.Bidir.Meta.Test.Main
         Fana.Serial.Bidir.Meta.Test.Instances
