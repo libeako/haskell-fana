@@ -1,7 +1,7 @@
 cabal-version: 3.0
 
 name: fana
-version: 0.0.0.187
+version: 0.0.0.188
 synopsis: Some commonly useful stuff
 category: Tools, Optics, Testing, Serialization
 license-file:  _license_.txt

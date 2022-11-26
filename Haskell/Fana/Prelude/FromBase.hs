@@ -9,8 +9,8 @@ module Fana.Prelude.FromBase
 	Functor, Foldable (toList, fold, foldMap, foldr, foldl'), Traversable, traverse, sequenceA,
 	Bifunctor, bimap,
 	Applicative (..), liftA3,
-	Monad (..),
-	Maybe (..), maybe,
+	Monad (..), (>=>), (=<<),
+	Maybe (..), maybe, fromMaybe, catMaybes,
 	Either (..), either,
 	map,
 	id, (>>>), (<<<),
@@ -18,9 +18,9 @@ module Fana.Prelude.FromBase
 )
 where
 
-import Control.Applicative (Applicative (..), liftA2, liftA3)
+import Control.Applicative (Applicative (..), pure, liftA2, liftA3)
 import Control.Category
-import Control.Monad (Monad (..))
+import Control.Monad (Monad (..), (>=>), (>>=), (=<<))
 import Data.Bifunctor (Bifunctor, bimap)
 import Data.Bool as Bool
 import Data.Coerce (Coercible, coerce)
@@ -28,7 +28,7 @@ import Data.Either (Either (..), either)
 import Data.Functor (Functor (..))
 import Data.Foldable
 import Data.Kind (Type, Constraint)
-import Data.Maybe (Maybe (..), maybe)
+import Data.Maybe (Maybe (..), maybe, fromMaybe, catMaybes)
 import Data.Semigroup (Semigroup (..))
 import Data.Monoid (Monoid (..))
 import Data.Traversable (Traversable, traverse, sequenceA)

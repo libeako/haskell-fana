@@ -9,7 +9,6 @@ module Fana.PropertyTree.Serialize
 where
 
 import Data.Default.Class
-import Data.Maybe (fromMaybe)
 import Data.Monoid (appEndo)
 import Fana.Prelude
 import Fana.PropertyTree.Data
