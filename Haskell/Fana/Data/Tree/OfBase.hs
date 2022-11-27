@@ -1,7 +1,7 @@
 -- | Extensions to container base/Data.Tree.
 module Fana.Data.Tree.OfBase
 (
-	Hight,
+	Count, Hight,
 	trunk_in_tree, children_in_tree,
 	filter_shallowly, filter_deeply,
 	with_hight,
@@ -20,7 +20,8 @@ import qualified Data.Maybe as Base
 import qualified Fana.Optic.Concrete.Categories.Lens as Optic
 
 
-type Hight = Base.Int
+type Count = Base.Int
+type Hight = Count
 
 
 trunk_in_tree :: Optic.Lens' e (Tree e)

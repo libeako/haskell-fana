@@ -3,7 +3,7 @@
 -}
 module Fana.Data.Tree.SerializeHight
 (
-	Hight,
+	Count, Hight,
 	HightListParseError (..),
 	render, parse, serializer,
 )
@@ -24,6 +24,7 @@ import qualified Fana.Optic.Concrete.Prelude as Optic
 import qualified Fana.Serial.Print.Show as Show
 
 
+type Count = OfBase.Count
 type Hight = OfBase.Hight
 
 show_data_with_hight :: Show.Showable String e => (Hight, e) -> Accumulated String
@@ -86,5 +87,5 @@ render =
 	map (with_hight >>> map (Bifunctor.first (+ (- 1)) >>> uncurry (,)) >>> Foldable.toList)
 	>>> Foldable.concat
 
-serializer :: Optic.PartialIso' (HightListParseError e) [(Hight, e)] [Tree e]
+serializer :: Optic.PartialIso (HightListParseError ep) [(Hight, er)] [(Hight, ep)] [Tree er] [Tree ep]
 serializer = Optic.PartialIso render parse
