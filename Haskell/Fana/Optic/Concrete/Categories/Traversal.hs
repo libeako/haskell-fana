@@ -2,7 +2,7 @@ module Fana.Optic.Concrete.Categories.Traversal
 (
 	Traversal (..),
 	Traversal',
-	from_Traversable,
+	from_Traversable, to_Traversal,
 )
 where
 
@@ -56,6 +56,9 @@ instance IsFold Traversal where
 	fold_r tr = Fold.fold_r_from_map_fold (map_fold tr)
 	fold_l tr = Fold.fold_l_from_map_fold (map_fold tr)
 
+
+to_Traversal :: IsTraversal o => o l1 l2 h1 h2 -> Traversal l1 l2 h1 h2
+to_Traversal o = Traversal (traverse o)
 
 -- * Combining Traversals by combinging their higher level
 

@@ -1,7 +1,7 @@
 module Fana.Optic.Concrete.Categories.Fold
 (
 	Fold, Fold',
-	from_to_list, from_map_fold, from_Foldable,
+	from_to_list, from_map_fold, from_Foldable, to_Fold,
 	fold_l_from_map_fold, fold_r_from_map_fold
 )
 where
@@ -57,6 +57,8 @@ instance Profunctor (Fold t1 t2) where
 instance IsFold Fold where
 	to_list = deFold
 
+to_Fold :: IsFold o => o l1 l2 h1 h2 -> Fold l1 l2 h1 h2
+to_Fold = to_list >>> Fold
 
 fold_r_from_map_fold ::
 	(forall m . Monoid m => (l -> m) -> (h -> m)) ->

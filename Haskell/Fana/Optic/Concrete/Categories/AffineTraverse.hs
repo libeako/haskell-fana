@@ -1,6 +1,6 @@
 module Fana.Optic.Concrete.Categories.AffineTraverse
 (
-	AffineTraversal (..), AffineTraversal',
+	AffineTraversal (..), AffineTraversal', to_AffineTraversal,
 )
 where
 
@@ -113,3 +113,6 @@ instance OpticP.Adapted AffineTraversal where
 		Profunctor.map_i (trav >>> fst) >>>
 		Profunctor.load_pe >>>
 		(Profunctor.dimap (\x -> (x, x)) (extract' (trav >>> snd)))
+
+to_AffineTraversal :: IsAffineTraversal o => o l1 l2 h1 h2 -> AffineTraversal l1 l2 h1 h2
+to_AffineTraversal o = AffineTraversal (match_and_replace o)

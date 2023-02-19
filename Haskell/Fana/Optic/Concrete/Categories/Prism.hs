@@ -1,7 +1,7 @@
 module Fana.Optic.Concrete.Categories.Prism
 (
 	Prism (Prism), Prism',
-	from_up_and_match,
+	from_up_and_match, to_Prism,
 	-- * Some Instances
 	prism_Maybe,
 	prism_Left,
@@ -99,6 +99,10 @@ instance IsAffineTraversal Prism where
 	match = p_match
 	replace = p_build >>> const
 instance IsPrism Prism where
+
+
+to_Prism :: IsPrism o => o l1 l2 h1 h2 -> Prism l1 l2 h1 h2
+to_Prism o = Prism (match o) (up o)
 
 
 ------------------------ some instances -------------------------------

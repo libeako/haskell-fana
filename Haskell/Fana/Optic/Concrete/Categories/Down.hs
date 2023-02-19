@@ -1,6 +1,6 @@
 module Fana.Optic.Concrete.Categories.Down
 (
-	Down (..), Down',
+	Down (..), Down', to_Down,
 )
 where
 
@@ -43,3 +43,7 @@ instance IsFold Down where
 	fold_r (Down g) combine r c = combine (g c) r
 	fold_l (Down g) combine r c = combine r (g c)
 instance IsDown Down where down = unwrap
+
+
+to_Down :: IsDown o => o l1 l2 h1 h2 -> Down l1 l2 h1 h2
+to_Down = down >>> Down

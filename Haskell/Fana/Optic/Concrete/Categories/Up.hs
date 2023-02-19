@@ -1,6 +1,6 @@
 module Fana.Optic.Concrete.Categories.Up
 (
-	Up (..), Up',
+	Up (..), Up', to_Up,
 )
 where
 
@@ -37,3 +37,6 @@ instance Profunctor (Up t1 t2) where
 
 instance IsInterpret e Up where interpret = unwrapUp >>> map Right
 instance IsUp Up where up = unwrapUp
+
+to_Up :: IsUp o => o l1 l2 h1 h2 -> Up l1 l2 h1 h2
+to_Up = up >>> Up

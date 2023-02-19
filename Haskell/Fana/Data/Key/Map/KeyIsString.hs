@@ -12,7 +12,7 @@ import Fana.Data.Key.Map.Interface
 import Fana.Data.Key.LensToMaybeElement (HasLensToMaybeElement (..))
 import Fana.Data.Key.Traversable
 import Fana.Data.Zippable (Zippable (..))
-import Fana.Math.Algebra.Category.ConvertThenCompose ((>**>^))
+import Fana.Math.Algebra.Category.OnTypePairs ((>**>))
 import Fana.Prelude hiding (traverse)
 import Prelude (Ord)
 
@@ -89,10 +89,10 @@ instance Ord c => HasLensToMaybeElement (Map c) where
 					maybeize = Optic.lens_from_get_set (Maybe.fromMaybe empty_coll) (optimize >>> const)
 					in
 						Category2.identity
-						>**>^ lens_at rest
-						>**>^ maybeize
-						>**>^ lens_at c
-						>**>^ lens_children
+						>**> lens_at rest
+						>**> maybeize
+						>**> lens_at c
+						>**> lens_children
 
 
 -- traverse

@@ -1,6 +1,6 @@
 module Fana.Optic.Concrete.Categories.Iso
 (
-	Iso (..), Iso',
+	Iso (..), Iso', to_Iso,
 	reverse,
 	fn_down,
 	change_iso_per_component,
@@ -91,6 +91,10 @@ instance IsIso Iso where
 
 instance Profunctor (Iso l1 l2) where
 	dimap fi fo (Iso d u) = Iso (fi >>> d) (u >>> fo)
+
+
+to_Iso :: IsIso o => o l1 l2 h1 h2 -> Iso l1 l2 h1 h2
+to_Iso o = Iso (down o) (up o)
 
 
 -- | Test of the given function being the identity function.

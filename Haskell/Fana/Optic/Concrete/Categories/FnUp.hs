@@ -1,7 +1,7 @@
 {-| Can move a function up. -}
 module Fana.Optic.Concrete.Categories.FnUp
 (
-	FnUp (..), FnUp',
+	FnUp (..), FnUp', to_FnUp,
 	sequence_fn_up,
 )
 where
@@ -45,6 +45,8 @@ instance Profunctor.LoadableP (FnUp i1 i2) where load_pe = Wrap.over (map Profun
 instance Profunctor.LoadableS (FnUp i1 i2) where load_se = Wrap.over (map Profunctor.load_se)
 instance Profunctor.LoadablePS (FnUp i1 i2) where
 
+to_FnUp :: IsFnUp o => o l1 l2 h1 h2 -> FnUp l1 l2 h1 h2
+to_FnUp = fn_up >>> FnUp
 
 sequence_fn_up ::
 	forall l h .

@@ -11,6 +11,8 @@ module Fana.Optic.Concrete.Categories.Lens
 
 	lift_functory_function,
 	
+	to_Lens,
+	
 	-- * Some Instances
 	lens_1, lens_2,
 )
@@ -141,6 +143,8 @@ instance IsAffineTraversal Lens where
 	replace (Lens l) = l >>> snd
 instance IsLens Lens where down_and_replace = unwrap
 
+to_Lens :: IsLens o => o l1 l2 h1 h2 -> Lens l1 l2 h1 h2
+to_Lens = down_and_replace >>> Lens
 
 instance Sumable Lens where
 	sum ::

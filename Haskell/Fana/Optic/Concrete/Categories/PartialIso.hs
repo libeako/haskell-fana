@@ -1,7 +1,7 @@
 -- | Partial isomorphism.
 module Fana.Optic.Concrete.Categories.PartialIso
 (
-	PartialIso (..), PartialIso',
+	PartialIso (..), PartialIso', to_PartialIso,
 	lift_piso, add_for_failure,
 	piso_convert_all, piso_convert_error, 
 	piso_convert_error_with_low, piso_add_verification,
@@ -30,7 +30,8 @@ import qualified Fana.Optic.Concrete.Common as Common
 	Can represent for example serialization layers,
 	whose parsers totally consume their input stream.
 -}
-data PartialIso e l1 l2 h1 h2 = PartialIso
+data PartialIso e l1 l2 h1 h2 =
+	PartialIso
 	{
 	piso_down :: h1 -> l1,
 	piso_interpret :: l2 -> Either e h2
@@ -60,6 +61,8 @@ instance HasDescribingClass4 (PartialIso e) where
 	type DescribingClass4Of (PartialIso e) = IsPartialIso e
 	convert_from_describing_class_4 o = PartialIso (down o) (interpret o)
 
+to_PartialIso :: IsPartialIso e o => o l1 l2 h1 h2 -> PartialIso e l1 l2 h1 h2
+to_PartialIso o = PartialIso (down o) (interpret o)
 
 piso_convert_error :: (e1 -> e2) -> PartialIso e1 l1 l2 h1 h2 -> PartialIso e2 l1 l2 h1 h2
 piso_convert_error t x = x { piso_interpret = piso_interpret x >>> Bifunctor.first t }
