@@ -1,6 +1,6 @@
 module Fana.Prelude.FromBase
 (
-	(.), const, flip, curry, uncurry, ($),
+	type (~), (.), const, flip, curry, uncurry, ($),
 	Type, Constraint,
 	Eq, (==), (/=),
 	Bool (..), (&&), (||),
@@ -32,6 +32,7 @@ import Data.Maybe (Maybe (..), maybe, fromMaybe, catMaybes)
 import Data.Semigroup (Semigroup (..))
 import Data.Monoid (Monoid (..))
 import Data.Traversable (Traversable, traverse, sequenceA)
+import Data.Type.Equality(type (~))
 import Prelude (const, flip, curry, uncurry)
 import Prelude (($), Eq, (==), (/=), fst, snd)
 
