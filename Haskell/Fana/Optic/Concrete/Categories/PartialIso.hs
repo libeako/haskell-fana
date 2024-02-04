@@ -5,7 +5,7 @@ module Fana.Optic.Concrete.Categories.PartialIso
 	lift_piso, add_for_failure,
 	piso_convert_all, piso_convert_error, 
 	piso_convert_error_with_low, piso_add_verification,
-	test_piso,
+	test_piso, test_piso'
 )
 where
 
@@ -160,3 +160,14 @@ test_piso levels ls hs piso =
 	Foldable.all (interpretation_fails piso) ls
 	&&
 	Foldable.all (flip (test_piso_on_single_data levels) piso) hs
+
+{-|
+	Goes down then up along the given partial isomorphism
+	and examines whether it ends back where started.
+
+	This function tests both success and fail cases.
+	Fail is expected on the given low level data.
+	Success is expected on the given high level data.
+-}
+test_piso' :: Eq h => [l] -> [h] -> PartialIso' e l h -> Bool
+test_piso' = test_piso (Category2.identity, Category2.identity)

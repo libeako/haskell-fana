@@ -19,7 +19,7 @@ import qualified Prelude as Base
 import qualified Fana.Data.Tree.SerializeHight as TreeSerial
 import qualified Fana.Optic.Concrete.Categories.Iso as Optic
 import qualified Fana.Optic.Concrete.Categories.PartialIso as Optic
-import qualified Fana.Serial.Bidir.Instances.Text.Lines as Serial
+import qualified Fana.Serial.Bidir.Instances.Text.Delimiters as Serial
 
 
 type Count = TreeSerial.Count

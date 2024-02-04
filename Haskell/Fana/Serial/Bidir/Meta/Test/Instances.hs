@@ -8,7 +8,7 @@ import Prelude (Ord (..), Char, Show (..))
 import Fana.Prelude.FromBase
 import Fana.Develop.Test.Define (Test)
 import Fana.Serial.Bidir.Instances.Text.Indent (line_with_indent)
-import Fana.Serial.Bidir.Instances.Text.Lines (lines)
+import Fana.Serial.Bidir.Instances.Text.Delimiters (lines)
 import Fana.Serial.Bidir.Serializer
 import Fana.Serial.Bidir.Test
 
