@@ -11,7 +11,7 @@ module Fana.Prelude.FromBase
 	Applicative (..), liftA3,
 	Monad (..), (>=>), (=<<),
 	Maybe (..), maybe, fromMaybe, catMaybes,
-	Either (..), either,
+	Either (..), either, partitionEithers,
 	map,
 	id, (>>>), (<<<),
 	Coercible, coerce,
@@ -24,7 +24,7 @@ import Control.Monad (Monad (..), (>=>), (>>=), (=<<))
 import Data.Bifunctor (Bifunctor, bimap)
 import Data.Bool as Bool
 import Data.Coerce (Coercible, coerce)
-import Data.Either (Either (..), either)
+import Data.Either (Either (..), either, partitionEithers)
 import Data.Functor (Functor (..))
 import Data.Foldable
 import Data.Kind (Type, Constraint)
