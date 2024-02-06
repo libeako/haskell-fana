@@ -2,7 +2,8 @@
 module Fana.Optic.Concrete.Categories.PartialIso
 (
 	PartialIso (..), PartialIso', to_PartialIso,
-	lift_piso, add_for_failure,
+	lift_piso, lift_piso_o,
+	add_for_failure,
 	piso_convert_all, piso_convert_error, 
 	piso_convert_error_with_low, piso_add_verification,
 	test_piso, test_piso'
@@ -12,6 +13,8 @@ where
 import Control.Monad ((<=<))
 import Fana.Haskell.DescribingClass
 import Fana.Math.Algebra.Category.Functor.Pro
+import Fana.Optic.Concrete.Categories.Traversal (Traversal (..))
+import Fana.Optic.Concrete.Categories.FnUp (FnUp (..))
 import Fana.Optic.Concrete.Categories.Interfaces
 import Fana.Optic.Concrete.Categories.Iso (Iso')
 import Fana.Prelude
@@ -105,7 +108,13 @@ piso_add_verification get_error m =
 
 -- | Lifts the given PartialIso to work on a container of elements.
 lift_piso :: (Functor tr, Traversable tp) => PartialIso e l1 l2 h1 h2 -> PartialIso e (tr l1) (tp l2) (tr h1) (tp h2)
-lift_piso (PartialIso d i) = PartialIso (map d) (map i >>> Traversable.sequenceA)
+lift_piso (PartialIso d i) = PartialIso (map d) (Traversable.traverse i)
+
+-- | Lifts the given PartialIso to work on a container of elements.
+lift_piso_o :: 
+	FnUp h1 l1 (tr h1) (tr l1) -> Traversal l2 h2 (tp l2) (tp h2) ->
+	PartialIso e l1 l2 h1 h2 -> PartialIso e (tr l1) (tp l2) (tr h1) (tp h2)
+lift_piso_o (FnUp fr) (Traversal tr) (PartialIso d i) = PartialIso (fr d) (tr i)
 
 {-|
 	Adds data to the interpretation component of a partial isomorphism for the failure case.
