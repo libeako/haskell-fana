@@ -67,13 +67,12 @@ cata_with_original step r =
 {-|
 	Destructing a recursive structure,
 	having access to the path to root.
-	The path for a node should not and then does not contain that node.
 -}
 cata_with_path_to_root' ::
 	forall r e . Recursive r =>
-	[r] -> ([r] -> StructureOf r e -> e) -> (r -> e)
+	[r] -> ((r, [r]) -> StructureOf r e -> e) -> (r -> e)
 cata_with_path_to_root' path_so_far step r =
-	step path_so_far (map (cata_with_path_to_root' (r : path_so_far) step) (show_structure r))
+	step (r, path_so_far) (map (cata_with_path_to_root' (r : path_so_far) step) (show_structure r))
 
 {-|
 	Destructing a recursive structure,
@@ -81,8 +80,8 @@ cata_with_path_to_root' path_so_far step r =
 -}
 cata_with_path_to_root ::
 	forall r e . Recursive r =>
-	([r] -> StructureOf r e -> e) -> (r -> e)
-cata_with_path_to_root = cata_with_path_to_root' []
+	((r, [r]) -> StructureOf r e -> e) -> (r -> e)
+cata_with_path_to_root step r = cata_with_path_to_root' [] step r
 
 {-| Building a corecursive structure. -}
 ana :: CoRecursive r => (e -> StructureOf r e) -> (e -> r)

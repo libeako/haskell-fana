@@ -5,7 +5,7 @@ module Fana.Develop.Test.Run
 where
 
 
-import Prelude ((++), String)
+import Prelude (String)
 import Fana.Prelude
 import Fana.Develop.Test.Define
 
@@ -33,7 +33,7 @@ get_tests_with_paths =
 		convert ((name, path), pv) = (name, pv, path)
 		in
 			id >>>
-				Tree.with_paths >>> DTree.copy_common_to_discriminated >>> DTree.leafs >>> Fold.toList >>>
+				Tree.with_paths True >>> DTree.copy_common_to_discriminated >>> DTree.leafs >>> Fold.toList >>>
 				map (convert >>> get_test_with_path)
 
 path_of_error :: Test -> Maybe [Text]
@@ -49,7 +49,7 @@ action_on_error_path =
 		react = \ case
 			Nothing -> ("all tests passed", Sys.ExitSuccess)
 			Just path ->
-				let message = "a test failed : " ++ (List.intercalate " : " path)
+				let message = "Test failed: " <> (List.intercalate ": " path) <> "."
 					in (message, Sys.ExitFailure 1)
 		in react >>> process_reaction
 

@@ -98,7 +98,7 @@ to_base_forest = Base.toList >>> map to_base_tree
 
 {-|
 	Path of a node in the tree
-	[by default : from the node, not including the node, to the root].
+	[by default : from the node to the root].
 -}
 type Path s e = [Tree s e]
 
@@ -106,11 +106,16 @@ type TreeWithPaths s e = Tree s (e, Path s e)
 
 {-|
 	Augments the content elements in each node with the path
-	from the node to the root, not including that node.
+	from the node to the root.
+	
+	The boolean input is whether paths to include the actual node.
 -}
-with_paths :: forall s e . Functor s => Tree s e -> TreeWithPaths s e
-with_paths =
+with_paths :: forall s e . Functor s => Bool -> Tree s e -> TreeWithPaths s e
+with_paths ia =
 	let
-		step :: [Tree s e] -> Node s e (TreeWithPaths s e) -> TreeWithPaths s e
-		step path = Optic.fn_up in_node_content (Pair.before path) >>> Tree
+		step :: (Tree s e, [Tree s e]) -> Node s e (TreeWithPaths s e) -> TreeWithPaths s e
+		step p@(_, earlier) =
+			let
+				path = if ia then (uncurry (:) p) else earlier
+				in Optic.fn_up in_node_content (Pair.before path) >>> Tree
 		in Recurse.cata_with_path_to_root step
