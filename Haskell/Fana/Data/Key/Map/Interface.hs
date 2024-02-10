@@ -10,7 +10,6 @@ import Fana.Data.Key.ElementsHaveKey
 import Fana.Data.Key.LensToMaybeElement
 import Fana.Data.Key.Traversable
 import Fana.Prelude.FromBase
-import Prelude (Ord)
 
 import qualified Data.Foldable as Fold
 import qualified Data.Map.Lazy as Base
@@ -24,11 +23,11 @@ class
 		MapContainer t
 		where
 
-	from_list :: Ord (Key t) => [(Key t, e)] -> t e
+	from_list :: [(Key t, e)] -> t e
 	from_list = Fold.foldr (uncurry set_at) empty_coll
 
 	-- | Same as @from_list@ but creates list of values for each key.
-	from_list_lists :: forall e . Ord (Key t) => [(Key t, e)] -> t [e]
+	from_list_lists :: forall e . [(Key t, e)] -> t [e]
 	from_list_lists =
 		let
 			folder :: (Key t, e) -> t [e] -> t [e]
@@ -44,7 +43,7 @@ class
 
 		In case of key collision : the output is a key at which collision is.
 	-}
-	from_list_of_uniques :: forall e . Ord (Key t) => [(Key t, e)] -> Either (Key t, [e]) (t e)
+	from_list_of_uniques :: [(Key t, e)] -> Either (Key t, [e]) (t e)
 	from_list_of_uniques =
 		let
 			elem_singlifier :: Key t -> [e] -> Either (Key t, [e]) e

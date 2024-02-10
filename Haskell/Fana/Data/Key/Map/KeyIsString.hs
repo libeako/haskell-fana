@@ -1,6 +1,8 @@
 {-| Map of which the type of keys is string of characters. -}
 module Fana.Data.Key.Map.KeyIsString
 (
+	module Fana.Data.Key.Map.Interface,
+	module Fana.Data.Key.LensToMaybeElement,
 	Elem, Map (..),
 )
 where
